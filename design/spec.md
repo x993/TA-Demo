@@ -390,14 +390,53 @@ A small queue:
 ### F) Search (instant)
 
 * Typeahead results for **tenants + properties**
-* Tenants show “Resolved entity” badge:
+* Tenants show "Resolved entity" badge:
 
   * Public / Private / Unknown
 * Tap result → tenant or property
 
 ---
 
-# 4) Demo Mode Strategy: “Instant & Flawless”
+## 3.4 Screen Interaction Contracts
+
+Navigation mechanics to prevent UI thrash during build.
+
+### Route vs Sheet vs Inline
+
+| Interaction | Pattern | Route |
+|-------------|---------|-------|
+| Brief → Tenant Memo | Route change | `/tenant/:id/event/:eventId` |
+| Memo → Evidence | Bottom sheet | (stays on memo route) |
+| Expand Priority bullet | Inline expansion | (no route change) |
+| Tap "Exposure" chip | Mini modal card | (no route change) |
+| Tap "Why" chip | Inline expansion | (no route change) |
+| Property list → Property detail | Route change | `/property/:id` |
+| Property → Tenant | Route change | `/tenant/:id` |
+| Search result → Entity | Route change | `/tenant/:id` or `/property/:id` |
+
+### Preloading Strategy
+
+| Trigger | Preload |
+|---------|---------|
+| Touchstart on Brief card | Memo data + first 3 evidence items |
+| Touchstart on Property row | Property detail + tenant roster |
+| Hover on search result | Entity summary |
+
+### Back Behavior
+
+* Browser back always works (route-based navigation)
+* Bottom sheets dismiss on swipe down or backdrop tap
+* Inline expansions collapse on tap outside or re-tap header
+
+### Animation Timing
+
+* Route transitions: 200ms ease-out
+* Bottom sheet: 300ms spring
+* Inline expand: 150ms ease-out
+
+---
+
+# 4) Demo Mode Strategy: "Instant & Flawless"
 
 ## 4.1 Demo data principle
 
@@ -572,6 +611,35 @@ Then **tenant watch score** is a smoothed value over time:
 * Sticky, non-twitchy
 * Big events move it (up or down), small events barely nudge
 * Positive events can move a tenant from Watch → Stable or improve confidence
+
+### 6.2.1 Scoring Thresholds (concrete numbers)
+
+**Status classification:**
+
+| Status | Severity | Confidence | Additional |
+|--------|----------|------------|------------|
+| Critical | ≥ 80 | ≥ 0.75 | — |
+| Watch | ≥ 55 | ≥ 0.60 | — |
+| Improving | ≥ 55 | ≥ 0.60 | sentiment = positive |
+| Stable | < 55 | any | or no material events |
+
+**Corroboration override:**
+* If ≥2 independent Tier 1/2 sources within 72 hours → allow Watch even if confidence slightly lower (≥ 0.50)
+
+**Sticky score rules:**
+* `watch_score` only updates on new validated events
+* Score decay: if no new events for 30 days, score drifts toward 50 (neutral)
+* Maximum single-event movement: ±25 points
+
+**UI caps (hard limits):**
+
+| Element | Max |
+|---------|-----|
+| Executive narrative bullets | 5 |
+| Brief cards (AM view) | 7 |
+| Evidence items per memo | 10 |
+| Concentration insights | 4 |
+| Exec questions | 3 |
 
 ---
 

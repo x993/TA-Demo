@@ -9,7 +9,8 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd initial project configuration and design specification\n\n- Add Claude Code settings with git permissions\n- Add MLP spec for tenant credit monitoring demo app\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git mv:*)"
     ]
   }
 }
