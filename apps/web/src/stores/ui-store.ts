@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { DemoRole } from "@/types";
+import type { DemoRole, PanelType } from "@/types";
 import { setDemoRole } from "@/lib/api";
 
 interface UIState {
@@ -18,6 +18,34 @@ interface UIState {
   // Event expansion (for inline expand on tenant detail)
   expandedEventId: string | null;
   toggleEventExpanded: (eventId: string) => void;
+
+  // Panel state
+  panelOpen: boolean;
+  panelType: PanelType | null;
+  panelEntityId: string | null;
+  panelTileData: any | null;
+  openPanel: (type: PanelType, entityId: string, tileData?: any) => void;
+  closePanel: () => void;
+
+  // Coverage drawer
+  coverageDrawerOpen: boolean;
+  openCoverageDrawer: () => void;
+  closeCoverageDrawer: () => void;
+
+  // Tenant scope sheet (per-tenant coverage)
+  tenantScopeSheetOpen: boolean;
+  tenantScopeId: string | null;
+  openTenantScopeSheet: (tenantId: string) => void;
+  closeTenantScopeSheet: () => void;
+
+  // Command palette (desktop)
+  commandPaletteOpen: boolean;
+  toggleCommandPalette: () => void;
+
+  // Run details modal
+  runDetailsModalOpen: boolean;
+  openRunDetailsModal: () => void;
+  closeRunDetailsModal: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -42,4 +70,55 @@ export const useUIStore = create<UIState>((set) => ({
     set((state) => ({
       expandedEventId: state.expandedEventId === eventId ? null : eventId,
     })),
+
+  // Panel state
+  panelOpen: false,
+  panelType: null,
+  panelEntityId: null,
+  panelTileData: null,
+  openPanel: (type, entityId, tileData = null) =>
+    set({
+      panelOpen: true,
+      panelType: type,
+      panelEntityId: entityId,
+      panelTileData: tileData,
+    }),
+  closePanel: () =>
+    set({
+      panelOpen: false,
+      panelType: null,
+      panelEntityId: null,
+      panelTileData: null,
+    }),
+
+  // Coverage drawer
+  coverageDrawerOpen: false,
+  openCoverageDrawer: () => set({ coverageDrawerOpen: true }),
+  closeCoverageDrawer: () => set({ coverageDrawerOpen: false }),
+
+  // Tenant scope sheet
+  tenantScopeSheetOpen: false,
+  tenantScopeId: null,
+  openTenantScopeSheet: (tenantId) =>
+    set({
+      tenantScopeSheetOpen: true,
+      tenantScopeId: tenantId,
+    }),
+  closeTenantScopeSheet: () =>
+    set({
+      tenantScopeSheetOpen: false,
+      tenantScopeId: null,
+    }),
+
+  // Command palette
+  commandPaletteOpen: false,
+  toggleCommandPalette: () =>
+    set((state) => ({
+      commandPaletteOpen: !state.commandPaletteOpen,
+    })),
+
+  // Run details modal
+  runDetailsModalOpen: false,
+  openRunDetailsModal: () => set({ runDetailsModalOpen: true }),
+  closeRunDetailsModal: () => set({ runDetailsModalOpen: false }),
 }));
