@@ -1,0 +1,29 @@
+{
+  "name": "credit-oversight",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:web": "turbo dev --filter=@credit-oversight/web",
+    "dev:api": "cd apps/api && poetry run uvicorn src.main:app --reload --port 8000",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "db:up": "docker-compose up -d postgres",
+    "db:down": "docker-compose down",
+    "db:reset": "docker-compose down -v && docker-compose up -d postgres",
+    "db:migrate": "cd apps/api && poetry run alembic upgrade head",
+    "db:revision": "cd apps/api && poetry run alembic revision --autogenerate -m",
+    "seed": "cd apps/api && poetry run python -m src.seed.load",
+    "seed:validate": "cd apps/api && poetry run python -m src.seed.validate"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "npm@10.2.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
