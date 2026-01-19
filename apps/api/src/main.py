@@ -60,10 +60,13 @@ async def log_requests(request: Request, call_next):
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled error: {exc}", exc_info=True)
+    import traceback
+    tb = traceback.format_exc()
+    logger.error(f"Unhandled error: {exc}\n{tb}")
+    # Return actual error in development
     return JSONResponse(
         status_code=500,
-        content={"detail": "An unexpected error occurred"},
+        content={"detail": str(exc), "traceback": tb if settings.debug else None},
     )
 
 

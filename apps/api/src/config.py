@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     # API
     api_v1_prefix: str = "/api/v1"
-    debug: bool = False
+    debug: bool = True
 
     # CORS — set to exact frontend URL in production
     cors_origins: str = "http://localhost:3000"
