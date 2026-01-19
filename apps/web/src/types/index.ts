@@ -34,6 +34,7 @@ export interface Property {
   city: string;
   state: string;
   assetClass: string;
+  imageUrl?: string;
   tenantCount: number;
   eventsCount: number;
 }
@@ -125,6 +126,13 @@ export interface BriefResponse {
   narrativeBullets?: NarrativeBullet[];
   concentrationInsights?: ConcentrationInsight[];
   execQuestions?: string[];
+  // New tile system fields
+  reviewStats?: ReviewStats;
+  priorityTiles?: PriorityTile[];
+  postureTiles?: PostureTile[];
+  clusterTiles?: ClusterTile[];
+  propertiesAttention?: PropertyAttentionItem[];
+  questions?: QuestionItem[];
 }
 
 export interface StatusCounts {
@@ -169,3 +177,97 @@ export interface EventDetailResponse {
 
 // Demo role type
 export type DemoRole = "exec" | "am";
+
+// === TILE SYSTEM TYPES ===
+
+export interface ReviewStats {
+  tenantsReviewed: number;
+  tenantsSurfaced: number;
+  lastReviewTime: string;
+  newSinceLastReview: number;
+}
+
+export interface PriorityTile {
+  id: string;
+  priority: 1 | 2 | 3;
+  statement: string;
+  affectedTenantCount: number;
+  affectedPropertyCount: number;
+  primaryTenantIds: string[];
+  primaryPropertyIds: string[];
+  isNew: boolean;
+}
+
+export interface ClusterTile {
+  id: string;
+  statement: string;
+  affectedTenantIds: string[];
+  affectedPropertyIds: string[];
+  segment?: string;
+}
+
+export interface PostureTile {
+  status: 'critical' | 'watch' | 'stable';
+  count: number;
+  delta: number;
+  deltaDirection: 'up' | 'down' | 'unchanged';
+}
+
+export interface PropertyAttentionItem {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  imageUrl?: string;
+  status: TenantStatus;
+  issuesCount: number;
+}
+
+export interface QuestionItem {
+  id: string;
+  text: string;
+  relatedTenantIds: string[];
+  relatedPropertyIds: string[];
+}
+
+// === PANEL TYPES ===
+
+export type PanelType = 'property' | 'tenant' | 'priority' | 'cluster';
+
+export interface PanelState {
+  isOpen: boolean;
+  type: PanelType | null;
+  entityId: string | null;
+  tileData?: PriorityTile | ClusterTile | null;
+}
+
+// === COVERAGE TYPES ===
+
+export interface CoverageToggle {
+  id: string;
+  label: string;
+  description: string;
+  enabled: boolean;
+  lastRefreshed?: string;
+}
+
+export interface CoverageSettings {
+  global: CoverageToggle[];
+  tenantOverrides: Record<string, CoverageToggle[]>;
+}
+
+// === MISSION CONTROL / MONITORING TYPES ===
+
+export type MonitoringStatus = 'active' | 'paused' | 'scanning';
+
+export type ScanFrequency = 'continuous' | 'hourly' | 'daily' | 'weekly';
+
+export interface MonitoringState {
+  status: MonitoringStatus;
+  frequency: ScanFrequency;
+  lastScanTime: string;
+  nextScheduledScan: string;
+  scanProgress: number; // 0-100 when scanning
+  sourcesActive: number;
+  sourcesTotal: number;
+}

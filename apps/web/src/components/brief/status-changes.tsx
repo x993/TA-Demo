@@ -19,7 +19,7 @@ export function StatusChanges({ changes }: StatusChangesProps) {
   return (
     <div className="rounded-xl border border-border bg-card p-4">
       <h3 className="text-base font-semibold text-foreground mb-4">
-        Status Changes This Week
+        Status Updates
       </h3>
 
       <div className="space-y-1">

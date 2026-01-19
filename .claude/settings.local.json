@@ -42,7 +42,21 @@
       "Bash(powershell:*)",
       "Bash(python:*)",
       "Bash(docker compose:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(node -e:*)",
+      "Bash(for pid in 1271084 1313532 1382912 1266456 1270760 1266980 781204)",
+      "Bash(do taskkill //F //PID $pid done sleep 2 netstat -ano)",
+      "Bash(tree:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(npx next build:*)",
+      "Bash(npx next dev)",
+      "Bash(ping:*)",
+      "Bash(tasklist:*)",
+      "Bash(cmd /c \"taskkill /PID 1443860 /F\")",
+      "Bash(poetry run uvicorn:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

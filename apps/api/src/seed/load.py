@@ -98,6 +98,7 @@ async def seed_properties(session: AsyncSession):
             city=item["city"],
             state=item["state"],
             asset_class=item["asset_class"],
+            image_url=item.get("image_url"),
         )
         session.add(prop)
     await session.commit()

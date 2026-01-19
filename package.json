@@ -16,7 +16,7 @@
     "seed:validate": "cd apps/api && poetry run python -m src.seed.validate"
   },
   "devDependencies": {
-    "turbo": "^2.3.0"
+    "turbo": "^2.7.5"
   },
   "packageManager": "npm@10.2.0",
   "engines": {

@@ -5,7 +5,8 @@
     "name": "Riverside Tower",
     "city": "Chicago",
     "state": "IL",
-    "asset_class": "Office"
+    "asset_class": "Office",
+    "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000002",
@@ -13,7 +14,8 @@
     "name": "Park Plaza Shopping Center",
     "city": "Dallas",
     "state": "TX",
-    "asset_class": "Retail"
+    "asset_class": "Retail",
+    "image_url": "https://images.unsplash.com/photo-1555636222-cae831e670b3?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000003",
@@ -21,7 +23,8 @@
     "name": "Lakewood Business Park",
     "city": "Atlanta",
     "state": "GA",
-    "asset_class": "Office"
+    "asset_class": "Office",
+    "image_url": "https://images.unsplash.com/photo-1554469384-e58fac16e23a?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000004",
@@ -29,7 +32,8 @@
     "name": "Gateway Industrial Complex",
     "city": "Phoenix",
     "state": "AZ",
-    "asset_class": "Industrial"
+    "asset_class": "Industrial",
+    "image_url": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000005",
@@ -37,7 +41,8 @@
     "name": "Metropolitan Center",
     "city": "Boston",
     "state": "MA",
-    "asset_class": "Office"
+    "asset_class": "Office",
+    "image_url": "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000006",
@@ -45,7 +50,8 @@
     "name": "Southfield Retail Center",
     "city": "Detroit",
     "state": "MI",
-    "asset_class": "Retail"
+    "asset_class": "Retail",
+    "image_url": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000007",
@@ -53,7 +59,8 @@
     "name": "Harbor Point Office Tower",
     "city": "Seattle",
     "state": "WA",
-    "asset_class": "Office"
+    "asset_class": "Office",
+    "image_url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000008",
@@ -61,7 +68,8 @@
     "name": "Crossroads Distribution Hub",
     "city": "Denver",
     "state": "CO",
-    "asset_class": "Industrial"
+    "asset_class": "Industrial",
+    "image_url": "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000009",
@@ -69,7 +77,8 @@
     "name": "Willowbrook Plaza",
     "city": "Austin",
     "state": "TX",
-    "asset_class": "Retail"
+    "asset_class": "Retail",
+    "image_url": "https://images.unsplash.com/photo-1519566335946-e6f65f0f4fdf?w=800&q=80"
   },
   {
     "id": "a0000001-0000-0000-0000-000000000010",
@@ -77,6 +86,7 @@
     "name": "Summit Technology Park",
     "city": "San Jose",
     "state": "CA",
-    "asset_class": "Office"
+    "asset_class": "Office",
+    "image_url": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80"
   }
 ]

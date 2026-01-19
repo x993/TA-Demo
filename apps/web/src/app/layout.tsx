@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { AppShell } from "@/components/ui/app-shell";
+import { MotionProvider } from "@/components/providers/motion-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,8 +18,6 @@ export const viewport: Viewport = {
   themeColor: "#1a2332",
 };
 
-import { AppShell } from "@/components/ui/app-shell";
-
 export default function RootLayout({
   children,
 }: {
@@ -27,7 +27,9 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={inter.className}>
         <div className="min-h-screen bg-background">
-          <AppShell>{children}</AppShell>
+          <MotionProvider>
+            <AppShell>{children}</AppShell>
+          </MotionProvider>
         </div>
       </body>
     </html>
