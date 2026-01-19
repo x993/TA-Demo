@@ -119,7 +119,41 @@ Top right:
 * Executive → lands on **Portfolio Credit Brief** (narrative + posture + delta)
 * Asset Manager → lands on **AM Credit Brief** (filtered to assigned properties, action-focused)
 
-## 3.2 “No noise by default” UX rules
+### Role Switch Strategy (Demo vs Production)
+
+**For demo: Explicit role switch.**
+
+```
+👤 Head of Assets ▾
+   Switch role (demo)
+```
+
+Place in top-right profile area — implies "who I'm logged in as." Never in main nav.
+
+Role switching is a **demo affordance**, not a product feature.
+
+**Verbal positioning during demo:**
+> "For the demo, I can switch between executive and asset manager perspectives. In production, this would be driven entirely by role-based access."
+
+Then move on. Don't linger.
+
+**For production: Implicit RBAC-driven experience.**
+
+No switch. Same components, different entry points based on role.
+
+| Capability               | Exec | AM |
+| ------------------------ | ---- | -- |
+| Portfolio brief          | ✅    | ❌  |
+| Concentration insights   | ✅    | ❌  |
+| Exec questions           | ✅    | ❌  |
+| Property drill-down      | ✅    | ✅  |
+| Tenant memo              | ✅    | ✅  |
+| Evidence                 | ✅    | ✅  |
+| Assigned properties only | ❌    | ✅  |
+
+**Key principle:** Execs can see down. AMs cannot see up.
+
+## 3.2 "No noise by default" UX rules
 
 * **Never show raw feeds** by default.
 * Cap “Brief” to **max 7 cards**.
@@ -135,22 +169,42 @@ Top right:
 
 **Above-the-fold sections:**
 
+#### Section 0 — Portfolio Verdict (top-line call)
+
+**One sentence. Above everything else.**
+
+This answers the exec's first subconscious question: *"Is this better or worse than last time I looked?"*
+
+Example:
+> **Portfolio status:** Risk increased modestly this week, driven by two isolated tenant liquidity events. No systemic deterioration detected.
+
+Or:
+> **Portfolio status:** Stable. No material changes this week.
+
+This single directional verdict dramatically increases executive confidence.
+
 #### Section 1 — "What you need to know right now"
 
-**Maximum 5 bullets. Hard limit.**
+**Maximum 5 bullets. Hard limit. Priority-ordered.**
 
-Each bullet is a synthesized insight, not a tenant.
+Each bullet is a synthesized insight, not a tenant. Explicitly labeled by priority:
+
+* 🔴 **Priority 1 — Requires discussion**
+* 🟡 **Priority 2 — Monitor**
+* ⚪ **Priority 3 — FYI**
 
 Examples:
-> • **Retail exposure deteriorated this week due to two unrelated tenant liquidity events.**
+> 🔴 **Retail exposure deteriorated this week due to two unrelated tenant liquidity events.**
 > *Driven by Acme Retail and Northstar Apparel.*
 
-> • **One office property now has >40% rent exposure to watch-list tenants.**
+> 🟡 **One office property now has >40% rent exposure to watch-list tenants.**
 > *Riverside Tower.*
 
-> • **No new bankruptcy risk identified this week.**
+> ⚪ **No new bankruptcy risk identified this week.**
 
 Each bullet is tappable → expands into supporting tenants → memo → evidence.
+
+Priority labeling signals judgment, confidence, and maturity — even with only 3 bullets.
 
 #### Section 2 — Portfolio Risk Posture
 
@@ -188,6 +242,35 @@ Examples:
 * "Three tenants appear across five properties."
 
 Each item expands to show: properties affected, tenants involved, short LLM-generated explanation.
+
+#### Section 5 — Questions to raise this week
+
+Execs don't just consume information — they prepare conversations. They think in questions, not actions.
+
+**2–3 questions max.** LLM-generated from the same portfolio synthesis.
+
+Examples:
+> • "What is our contingency plan if Acme Retail seeks rent relief?"
+> • "Are we comfortable with current exposure concentration at Riverside Tower?"
+> • "Do we expect follow-on disclosures from Northstar Apparel?"
+
+This makes the product feel like a senior advisor, not a reporting tool.
+
+#### Footer — Visible Restraint + Institutional Anchor
+
+Execs are suspicious of monitoring tools ("this will light up constantly"). Proactively demonstrate discipline and seriousness.
+
+Always visible at bottom of exec brief:
+
+> **30 tenants reviewed this week. 5 required your attention.**
+>
+> *Prepared as of Jan 17, 2026 using all available filings and verified sources.*
+
+This communicates:
+* Coverage (we looked at everything)
+* Discipline (we filtered aggressively)
+* Signal-to-noise (you're only seeing what matters)
+* Institutional credibility (reads like a memo header)
 
 **Thresholds for exec page content:**
 1. Must be **aggregated** (not single-entity by default)
@@ -434,10 +517,13 @@ Precomputed weekly synthesis for the executive view.
 
 * `id`
 * `as_of_date` (date)
-* `narrative_bullets` jsonb — max 5 synthesized insights with supporting entity IDs
+* `portfolio_verdict` jsonb — single directional call: direction, magnitude, statement, confidence
+* `narrative_bullets` jsonb — max 5 synthesized insights with priority (1/2/3) and supporting entity IDs
 * `risk_posture` jsonb — `{ critical: int, watch: int, stable: int, improving: int }`
 * `week_over_week` jsonb — `{ deteriorated: int, improved: int, unchanged: int }`
 * `concentration_insights` jsonb — array of clustering observations with affected entity IDs
+* `exec_questions` jsonb — 2–3 questions for exec to raise with team
+* `coverage` jsonb — `{ tenants_reviewed: int, tenants_surfaced: int }`
 * `created_at`
 
 ---
@@ -582,34 +668,54 @@ Once per snapshot (e.g., weekly), run a **portfolio-level synthesis** to generat
 ```json
 {
   "as_of": "2026-01-17",
+
+  "portfolio_verdict": {
+    "direction": "increased",  // "increased" | "decreased" | "stable"
+    "magnitude": "modestly",   // "significantly" | "modestly" | null
+    "statement": "Risk increased modestly this week, driven by two isolated tenant liquidity events. No systemic deterioration detected.",
+    "confidence": 0.88
+  },
+
   "narrative_bullets": [
     {
-      "statement": "Retail exposure deteriorated modestly this week due to two tenant liquidity disclosures.",
+      "statement": "Retail exposure deteriorated this week due to two unrelated tenant liquidity events.",
+      "priority": 1,  // 1 = requires discussion, 2 = monitor, 3 = FYI
       "confidence": 0.91,
       "supporting_tenant_ids": ["uuid1", "uuid2"],
       "supporting_property_ids": ["uuid3"]
     },
     {
+      "statement": "One office property now has >40% rent exposure to watch-list tenants.",
+      "priority": 2,
+      "confidence": 0.87,
+      "supporting_tenant_ids": ["uuid4"],
+      "supporting_property_ids": ["uuid5"]
+    },
+    {
       "statement": "No new bankruptcy risk identified this week.",
+      "priority": 3,
       "confidence": 0.95,
       "supporting_tenant_ids": [],
       "supporting_property_ids": []
     }
   ],
+
   "risk_posture": {
     "critical": 3,
     "watch": 9,
     "stable": 18,
     "improving": 4
   },
+
   "week_over_week": {
     "deteriorated": 4,
     "improved": 3,
     "unchanged": 23
   },
+
   "concentration_insights": [
     {
-      "statement": "Two properties account for over half of current watch-list exposure.",
+      "statement": "Two properties contain 55% of portfolio credit risk signals.",
       "property_ids": ["uuid1", "uuid2"],
       "tenant_ids": ["uuid3", "uuid4", "uuid5"]
     },
@@ -619,18 +725,34 @@ Once per snapshot (e.g., weekly), run a **portfolio-level synthesis** to generat
       "tenant_ids": ["uuid1", "uuid2", "uuid3"],
       "segment": "retail"
     }
-  ]
+  ],
+
+  "exec_questions": [
+    "What is our contingency plan if Acme Retail seeks rent relief?",
+    "Are we comfortable with current exposure concentration at Riverside Tower?",
+    "Do we expect follow-on disclosures from Northstar Apparel?"
+  ],
+
+  "coverage": {
+    "tenants_reviewed": 30,
+    "tenants_surfaced": 5
+  },
+
+  "prepared_statement": "Prepared as of Jan 17, 2026 using all available filings and verified sources."
 }
 ```
 
 ### Prompting for portfolio synthesis
 
-* System: "You are a senior credit portfolio analyst. Synthesize individual tenant events into portfolio-level insights. Be conservative. Focus on systemic patterns, concentration risk, and week-over-week changes. Maximum 5 narrative bullets. Each statement must be interpretable in one sentence."
+* System: "You are a senior credit portfolio analyst preparing a weekly brief for the Head of Assets. Synthesize individual tenant events into portfolio-level insights. Be conservative. Start with a single-sentence directional verdict. Prioritize bullets by urgency. Generate 2–3 questions the exec should raise with their team. Focus on systemic patterns, concentration risk, and week-over-week changes."
 * Hard constraints:
-  * Max 5 narrative bullets
+  * Must include portfolio_verdict with directional call
+  * Max 5 narrative bullets, each with priority (1/2/3)
   * Max 4 concentration insights
+  * Max 3 exec_questions
   * Every statement must reference supporting entity IDs
   * If no systemic pattern exists, say so explicitly (e.g., "risks are unrelated and isolated")
+  * Include coverage stats (tenants reviewed vs surfaced)
 
 ## 7.5 Precompute workflow
 
@@ -669,7 +791,7 @@ Base URL: `/api/v1`
 ### Executive Portfolio Brief
 
 * `GET /exec/brief?asOf=2026-01-17`
-  Returns the full executive view: narrative, posture, delta, concentration.
+  Returns the full executive view: verdict, narrative, posture, delta, concentration, questions, coverage.
 
 Response:
 
@@ -677,9 +799,17 @@ Response:
 {
   "as_of": "2026-01-17",
   "updated_at": "2026-01-17T12:00:00Z",
+
+  "portfolio_verdict": {
+    "direction": "increased",
+    "magnitude": "modestly",
+    "statement": "Risk increased modestly this week, driven by two isolated tenant liquidity events. No systemic deterioration detected."
+  },
+
   "narrative_bullets": [
     {
       "statement": "Retail exposure deteriorated this week due to two tenant liquidity events.",
+      "priority": 1,
       "confidence": 0.91,
       "supporting_tenants": [
         { "tenant_id": "uuid", "tenant_name": "Acme Retail" }
@@ -689,12 +819,14 @@ Response:
       ]
     }
   ],
+
   "risk_posture": {
     "critical": 3,
     "watch": 9,
     "stable": 18,
     "improving": 4
   },
+
   "week_over_week": {
     "deteriorated": [
       { "tenant_id": "uuid", "tenant_name": "Acme Retail", "from_status": "watch", "to_status": "critical" }
@@ -702,6 +834,7 @@ Response:
     "improved": [],
     "unchanged_count": 23
   },
+
   "concentration_insights": [
     {
       "statement": "Two properties contain 55% of portfolio credit risk signals.",
@@ -710,7 +843,18 @@ Response:
       ],
       "tenants": []
     }
-  ]
+  ],
+
+  "exec_questions": [
+    "What is our contingency plan if Acme Retail seeks rent relief?",
+    "Are we comfortable with current exposure concentration at Riverside Tower?"
+  ],
+
+  "coverage": {
+    "tenants_reviewed": 30,
+    "tenants_surfaced": 5,
+    "prepared_statement": "Prepared as of Jan 17, 2026 using all available filings and verified sources."
+  }
 }
 ```
 
@@ -900,19 +1044,27 @@ The demo has two acts: **Executive (telescope)** first, then **Asset Manager (mi
 
 Lands on **Portfolio Credit Brief** (not a dashboard, not a table).
 
-Above the fold, exec sees:
-* 3–4 narrative bullets (synthesized insights)
+**First thing exec sees — the verdict (top-line call):**
+> **Portfolio status:** Risk increased modestly this week, driven by two isolated tenant liquidity events. No systemic deterioration detected.
+
+This answers the exec's first subconscious question before they even scroll.
+
+**Below that:**
+* 🔴/🟡/⚪ Priority-labeled narrative bullets (not equal weight — explicit ranking)
 * Risk posture cards (3 critical / 9 watch / 18 stable)
 * Week-over-week delta (4 deteriorated / 3 improved)
 
+**At the bottom — the restraint indicator:**
+> "30 tenants reviewed. 5 required your attention."
+
 **Within 10 seconds**, exec already understands:
-* Where risk sits
-* Whether things are getting worse
-* Whether action is needed
+* Better or worse than last week? (verdict)
+* What to focus on first? (priorities)
+* Is this noisy? (coverage stat says no)
 
-### Step 2 — Tap a narrative bullet
+### Step 2 — Tap a Priority 1 bullet
 
-> "Retail exposure deteriorated this week due to two unrelated tenant liquidity events."
+> 🔴 "Retail exposure deteriorated this week due to two unrelated tenant liquidity events."
 
 Expands to show:
 * 2 tenants (Acme Retail, Northstar Apparel)
@@ -929,17 +1081,27 @@ Full analyst-quality memo:
 
 Evidence available but optional — exec doesn't need to click.
 
-### Step 4 — Back → Tap "Concentration risk"
+### Step 4 — Back → Scroll to "Questions to raise this week"
+
+> • "What is our contingency plan if Acme Retail seeks rent relief?"
+> • "Are we comfortable with current exposure concentration at Riverside Tower?"
+
+**This is the moment.** The product just told the exec what to ask in their next meeting.
+
+It feels like a senior advisor, not a reporting tool.
+
+### Step 5 — Tap "Concentration risk"
 
 > "Two properties contain 55% of portfolio credit risk signals."
 
 Shows which properties, which tenants, why.
 
 **At this point, you've demonstrated:**
-* ✅ Judgment (not just data)
-* ✅ Synthesis (portfolio-level patterns)
-* ✅ Restraint (5 bullets, not 50)
-* ✅ Auditability (drill-down available)
+* ✅ Directional verdict (better/worse)
+* ✅ Explicit prioritization (what matters most)
+* ✅ Conversation guidance (what to ask)
+* ✅ Visible restraint (30 reviewed, 5 surfaced)
+* ✅ Judgment + synthesis + auditability
 
 That's executive magic.
 
@@ -982,10 +1144,11 @@ Instant typeahead, resolved entity badge, status indicator.
 
 ## What the exec walks away thinking
 
+* "It told me better or worse in one sentence."
+* "It told me what to focus on first."
+* "It told me what to ask my team."
+* "It didn't light up with noise — 30 reviewed, 5 surfaced."
 * "This is how we should run portfolio oversight."
-* "This is judgment, not just data."
-* "This saves my team hours."
-* "It catches both problems AND opportunities."
 * "I can drill down when I want — but I don't have to."
 
 ---
@@ -994,12 +1157,12 @@ Instant typeahead, resolved entity badge, status indicator.
 
 | Before | Now |
 |--------|-----|
-| ✅ Excellent analysis | ✅ Narrative layer |
-| ✅ Great drill-down | ✅ Prioritization |
-| ❌ No narrative layer | ✅ Aggregation |
-| | ✅ Judgment |
-| | ✅ Drill-down |
-| | ✅ Audit trail |
+| ✅ Excellent analysis | ✅ Top-line verdict |
+| ✅ Great drill-down | ✅ Priority ordering |
+| ❌ No narrative layer | ✅ Conversation guidance |
+| ❌ No exec psychology | ✅ Visible restraint |
+| | ✅ Narrative + synthesis |
+| | ✅ Drill-down + audit trail |
 
 This is the difference between:
 > "Nice tool"
