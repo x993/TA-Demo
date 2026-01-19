@@ -1,8 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Building, Bell, Search, ChevronDown, User, Layers } from "lucide-react";
+import {
+  FileText,
+  Building,
+  Bell,
+  Search,
+  ChevronDown,
+  User,
+  Layers,
+  Settings,
+  HelpCircle,
+  BookOpen,
+  Menu,
+  X,
+  ExternalLink
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/stores/ui-store";
 import {
@@ -15,29 +30,43 @@ import {
 } from "./dropdown-menu";
 
 const navItems = [
-  { href: "/", icon: FileText, label: "Brief" },
+  { href: "/", label: "Dashboard" },
+  { href: "/properties", label: "Properties" },
+  { href: "/tenants", label: "Tenants" },
+  { href: "/alerts", label: "Alerts" },
+];
+
+// Bottom nav with icons for mobile
+const bottomNavItems = [
+  { href: "/", icon: FileText, label: "Dashboard" },
   { href: "/properties", icon: Building, label: "Properties" },
+  { href: "/tenants", icon: Search, label: "Tenants" },
   { href: "/alerts", icon: Bell, label: "Alerts" },
-  { href: "/search", icon: Search, label: "Search" },
 ];
 
 function Header() {
   const { role, setRole } = useUIStore();
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const roleLabel = role === "exec" ? "Head of Assets" : "Asset Manager";
 
   return (
-    <header className="sticky top-0 z-40 h-14 border-b border-border/50 bg-background/95 backdrop-blur-sm">
-      <div className="container flex h-full items-center justify-between px-4">
-        {/* Logo with brand icon */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <Layers className="h-5 w-5 text-primary" />
-          <span className="font-semibold">Credit Oversight</span>
+    <header className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur-sm">
+      <div className="container flex h-14 items-center px-4">
+        {/* Logo - fixed width */}
+        <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+            <Layers className="h-4.5 w-4.5 text-primary-foreground" />
+          </div>
+          <div className="hidden sm:block">
+            <span className="font-bold text-base">Credit Oversight</span>
+            <span className="text-[10px] text-muted-foreground block -mt-0.5">by Acme Analytics</span>
+          </div>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        {/* Desktop Navigation - centered */}
+        <nav className="hidden md:flex items-center justify-center gap-1 flex-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
             return (
@@ -45,45 +74,178 @@ function Header() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                  "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
                   isActive
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "text-foreground bg-muted"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 )}
               >
                 {item.label}
               </Link>
             );
           })}
+
+          {/* Pricing link */}
+          <Link
+            href="/pricing"
+            className="px-3 py-1.5 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+          >
+            Pricing
+          </Link>
+
+          {/* Resources dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors outline-none">
+              Resources
+              <ChevronDown className="h-3 w-3" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="w-52">
+              <DropdownMenuItem asChild>
+                <Link href="/docs" className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  Documentation
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/help" className="flex items-center gap-2">
+                  <HelpCircle className="h-4 w-4" />
+                  Help Center
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/api-access" className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  API Reference
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/status" className="flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4" />
+                  Status Page
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
-        {/* Role Switcher */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm hover:bg-muted transition-colors outline-none">
-            <User className="h-4 w-4 text-muted-foreground" />
-            <span className="hidden sm:inline text-foreground">{roleLabel}</span>
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Demo Role Switch
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => setRole("exec")}
-              className={cn(role === "exec" && "bg-muted")}
-            >
-              Head of Assets
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setRole("am")}
-              className={cn(role === "am" && "bg-muted")}
-            >
-              Asset Manager
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Right side actions */}
+        <div className="hidden md:flex items-center gap-3 shrink-0">
+          {/* Contact Sales badge */}
+          <Link
+            href="/contact"
+            className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+          >
+            Contact Sales
+          </Link>
+
+          {/* Role Switcher */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm hover:bg-muted transition-colors outline-none border border-border/50">
+              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
+                <User className="h-3.5 w-3.5 text-primary" />
+              </div>
+              <span className="hidden sm:inline text-foreground font-medium max-w-[100px] truncate">{roleLabel}</span>
+              <ChevronDown className="h-3 w-3 text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuLabel className="text-xs text-muted-foreground font-normal">
+                Switch demo persona
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => setRole("exec")}
+                className={cn("cursor-pointer", role === "exec" && "bg-muted")}
+              >
+                <div>
+                  <div className="font-medium">Head of Assets</div>
+                  <div className="text-xs text-muted-foreground">Executive overview</div>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setRole("am")}
+                className={cn("cursor-pointer", role === "am" && "bg-muted")}
+              >
+                <div>
+                  <div className="font-medium">Asset Manager</div>
+                  <div className="text-xs text-muted-foreground">Property-level detail</div>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/settings" className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-md hover:bg-muted transition-colors"
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-border/50 bg-background">
+          <nav className="container px-4 py-3 space-y-1">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                    isActive
+                      ? "text-foreground bg-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            <Link
+              href="/pricing"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Pricing
+            </Link>
+            <div className="pt-2 border-t border-border/50 mt-2">
+              <Link
+                href="/docs"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Documentation
+              </Link>
+              <Link
+                href="/help"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Help Center
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Contact Sales
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
@@ -94,7 +256,7 @@ function BottomNav() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/50 bg-background/95 backdrop-blur-sm md:hidden safe-area-inset-bottom">
       <div className="flex items-center justify-around h-16 pb-safe">
-        {navItems.map((item) => {
+        {bottomNavItems.map((item) => {
           const Icon = item.icon;
           const isActive =
             pathname === item.href ||
@@ -126,12 +288,81 @@ function BottomNav() {
   );
 }
 
+function Footer() {
+  return (
+    <footer className="border-t border-border/50 bg-muted/30 mt-auto">
+      <div className="container px-4 py-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {/* Brand */}
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+                <Layers className="h-4 w-4 text-primary-foreground" />
+              </div>
+              <span className="font-bold">Credit Oversight</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Real-time tenant credit monitoring for commercial real estate portfolios.
+            </p>
+          </div>
+
+          {/* Product */}
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Product</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
+              <li><Link href="/properties" className="text-muted-foreground hover:text-foreground transition-colors">Properties</Link></li>
+              <li><Link href="/alerts" className="text-muted-foreground hover:text-foreground transition-colors">Alerts</Link></li>
+              <li><Link href="/api-access" className="text-muted-foreground hover:text-foreground transition-colors">API Access</Link></li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Company</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About Us</Link></li>
+              <li><Link href="/careers" className="text-muted-foreground hover:text-foreground transition-colors">Careers</Link></li>
+              <li><Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">Blog</Link></li>
+              <li><Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Legal</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link></li>
+              <li><Link href="/security" className="text-muted-foreground hover:text-foreground transition-colors">Security</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-8 pt-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-muted-foreground">
+            © 2026 Acme Analytics, Inc. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/status" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Status</Link>
+            <Link href="/help" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Support</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="container px-4 py-6 pb-24 md:pb-6">{children}</main>
+      <main className="flex-1 pb-24 md:pb-0">{children}</main>
+      <div className="hidden md:block">
+        <Footer />
+      </div>
       <BottomNav />
-    </>
+    </div>
   );
 }

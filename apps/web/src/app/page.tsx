@@ -6,7 +6,6 @@ import { api } from '@/lib/api';
 
 // Tiles
 import {
-  PriorityTile,
   ClusterTile,
   PropertyTile,
   PostureTile
@@ -17,10 +16,8 @@ import { WeeklyHeadline } from '@/components/brief/weekly-headline';
 import { PortfolioVerdictCard } from '@/components/brief/portfolio-verdict';
 import { StatusChanges } from '@/components/brief/status-changes';
 import { RecentEvents } from '@/components/brief/event-card';
-import { CoverageStatement } from '@/components/brief/coverage-statement';
 
 // System components
-import { ReviewStatus } from '@/components/system/review-status';
 import { RunDetailsModal } from '@/components/system/run-details-modal';
 
 // Panels & Drawers
@@ -29,6 +26,12 @@ import { CoverageDrawer, TenantScopeSheet } from '@/components/coverage';
 
 // Desktop
 import { CommandPalette } from '@/components/desktop';
+
+// Mission Control
+import { MissionControl } from '@/components/mission-control';
+
+// Hero
+import { HeroSection } from '@/components/hero';
 
 // UI
 import { Button } from '@/components/ui/button';
@@ -43,6 +46,7 @@ export default function HomePage() {
   const [brief, setBrief] = useState<BriefResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAllProperties, setShowAllProperties] = useState(true);
 
   const fetchBrief = async () => {
     setLoading(true);
@@ -94,18 +98,6 @@ export default function HomePage() {
     },
   ];
 
-  // Build priority tiles from narrative bullets
-  const priorityTiles = brief.narrativeBullets?.slice(0, 5).map((bullet, i) => ({
-    id: `priority-${i}`,
-    priority: bullet.priority as 1 | 2 | 3,
-    statement: bullet.text,
-    affectedTenantCount: bullet.supportingTenantIds.length,
-    affectedPropertyCount: 0,
-    primaryTenantIds: bullet.supportingTenantIds.slice(0, 3),
-    primaryPropertyIds: [],
-    isNew: false,
-  })) || [];
-
   // Build cluster tiles from concentration insights
   const clusterTiles = brief.concentrationInsights?.slice(0, 4).map((insight, i) => ({
     id: `cluster-${i}`,
@@ -115,205 +107,224 @@ export default function HomePage() {
     segment: undefined,
   })) || [];
 
-  // Build questions from exec questions
-  const questions = brief.execQuestions?.slice(0, 5).map((q, i) => ({
-    id: `question-${i}`,
-    text: q,
-    relatedTenantIds: [],
-    relatedPropertyIds: [],
-  })) || [];
+  // Get properties with changes (positive or negative status)
+  const propertiesWithChanges = brief.propertiesAttention?.filter(p =>
+    p.issuesCount > 0 || p.status === 'improving'
+  ).slice(0, showAllProperties ? undefined : 4) || [];
 
-  // Mock review stats (in production, this comes from API)
-  const reviewStats = {
-    tenantsReviewed: brief.coverage.tenantsMonitored,
-    tenantsSurfaced: brief.coverage.tenantsWithDisclosures,
-    lastReviewTime: brief.updatedAt,
-    newSinceLastReview: 0,
-  };
+  const hasMoreProperties = (brief.propertiesAttention?.length || 0) > 4;
 
   return (
     <>
-      <div className="container mx-auto px-4 py-6 max-w-4xl">
-        {/* Header section */}
-        <header className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-2xl font-bold tracking-tight">
-              {isExec ? 'Portfolio' : 'Your Properties'}
-            </h1>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={openCoverageDrawer}
-            >
-              <Settings2 className="h-4 w-4 mr-2" />
-              Coverage
-            </Button>
-          </div>
+      {/* Hero Section */}
+      <HeroSection
+        statusCounts={brief.statusCounts}
+        tenantsMonitored={brief.coverage.tenantsMonitored}
+      />
 
-          {/* Review status */}
-          <ReviewStatus stats={reviewStats} />
-        </header>
+      {/* Main content with sidebar layout */}
+      <div id="portfolio-content" className="container mx-auto px-4 pb-6">
+        <div className="flex gap-6">
+          {/* Left Sidebar - Mission Control */}
+          <aside className="hidden lg:block w-64 shrink-0">
+            <div className="sticky top-20 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
+              <MissionControl
+                statusCounts={brief.statusCounts}
+                coverage={brief.coverage}
+              />
+            </div>
+          </aside>
 
-        {/* Executive view */}
-        {isExec && (
-          <StaggerContainer className="space-y-8">
-            {/* Section A: Portfolio Verdict */}
-            {brief.portfolioVerdict && (
-              <StaggerItem>
-                <section>
-                  <PortfolioVerdictCard verdict={brief.portfolioVerdict} />
-                </section>
-              </StaggerItem>
-            )}
+          {/* Main content area */}
+          <div className="flex-1 max-w-3xl">
+            {/* Coverage button for mobile */}
+            <div className="flex justify-end mb-4 lg:hidden">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={openCoverageDrawer}
+              >
+                <Settings2 className="h-4 w-4 mr-2" />
+                Coverage
+              </Button>
+            </div>
 
-            {/* Section B: Priority Tiles */}
-            {priorityTiles.length > 0 && (
-              <StaggerItem>
-                <section>
-                  <h2 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
-                    Priorities
-                  </h2>
-                  <div className="space-y-3">
-                    {priorityTiles.map(tile => (
-                      <PriorityTile
-                        key={tile.id}
-                        tile={tile}
-                        onClick={() => {
-                          const tenantId = tile.primaryTenantIds[0];
-                          if (tenantId) {
-                            openPanel('priority', tenantId, tile);
-                          }
-                        }}
-                      />
-                    ))}
-                  </div>
-                </section>
-              </StaggerItem>
-            )}
+            {/* Executive view */}
+            {isExec && (
+              <StaggerContainer className="space-y-8">
+                {/* Section A: Portfolio Verdict */}
+                {brief.portfolioVerdict && (
+                  <StaggerItem>
+                    <section>
+                      <PortfolioVerdictCard verdict={brief.portfolioVerdict} />
+                    </section>
+                  </StaggerItem>
+                )}
 
-            {/* Section C: Risk Posture Tiles */}
-            <StaggerItem>
-              <section>
-                <h2 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
-                  Risk Posture
-                </h2>
-                <div className="grid grid-cols-3 gap-3">
-                  {postureTiles.map(tile => (
-                    <PostureTile
-                      key={tile.status}
-                      tile={tile}
-                      onClick={() => {
-                        window.location.href = `/tenants?status=${tile.status}`;
-                      }}
-                    />
-                  ))}
+                {/* Divider */}
+                <div className="flex justify-center">
+                  <div className="w-16 h-px bg-border" />
                 </div>
-              </section>
-            </StaggerItem>
 
-            {/* Section D: Status Changes */}
-            <StaggerItem>
-              <StatusChanges changes={brief.statusChanges} />
-            </StaggerItem>
+                {/* Section B: Risk Posture with Properties */}
+                <StaggerItem>
+                  <section>
+                    <h3 className="text-base font-semibold text-foreground mb-4">
+                      Risk Posture
+                    </h3>
+                    {/* Status tiles */}
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      {postureTiles.map(tile => (
+                        <PostureTile
+                          key={tile.status}
+                          tile={tile}
+                          onClick={() => {
+                            window.location.href = `/tenants?status=${tile.status}`;
+                          }}
+                        />
+                      ))}
+                    </div>
 
-            {/* Section E: Concentration / Clusters */}
-            {clusterTiles.length > 0 && (
-              <StaggerItem>
+                    {/* Properties with changes */}
+                    {propertiesWithChanges.length > 0 && (
+                      <div className="mt-4">
+                        <h3 className="text-xs text-muted-foreground mb-3">
+                          Properties with changes
+                        </h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                          {propertiesWithChanges.map(prop => (
+                            <PropertyTile
+                              key={prop.id}
+                              property={prop}
+                              onClick={() => openPanel('property', prop.id)}
+                            />
+                          ))}
+                        </div>
+                        {hasMoreProperties && (
+                          <button
+                            onClick={() => setShowAllProperties(!showAllProperties)}
+                            className="w-full mt-3 py-2 text-xs text-muted-foreground hover:text-foreground flex items-center justify-center gap-1 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors"
+                          >
+                            {showAllProperties ? 'Show less' : `View all ${brief.propertiesAttention?.length || 0} properties`}
+                            <ChevronRight className={`h-3 w-3 transition-transform ${showAllProperties ? '-rotate-90' : ''}`} />
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </section>
+                </StaggerItem>
+
+                {/* Divider */}
+                <div className="flex justify-center">
+                  <div className="w-16 h-px bg-border" />
+                </div>
+
+                {/* Section C: Status Changes */}
+                <StaggerItem>
+                  <StatusChanges changes={brief.statusChanges} />
+                </StaggerItem>
+
+                {/* Divider */}
+                <div className="flex justify-center">
+                  <div className="w-16 h-px bg-border" />
+                </div>
+
+                {/* Section D: Concentration / Clusters */}
+                {clusterTiles.length > 0 && (
+                  <StaggerItem>
+                    <section>
+                      <h3 className="text-base font-semibold text-foreground mb-4">
+                        Risk Concentration
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {clusterTiles.map(tile => (
+                          <ClusterTile
+                            key={tile.id}
+                            tile={tile}
+                            onClick={() => {
+                              const propertyId = tile.affectedPropertyIds[0];
+                              if (propertyId) {
+                                openPanel('cluster', propertyId, tile);
+                              }
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </section>
+                  </StaggerItem>
+                )}
+
+                {/* Divider */}
+                <div className="flex justify-center">
+                  <div className="w-16 h-px bg-border" />
+                </div>
+
+                {/* Section E: Recent Events */}
+                <StaggerItem>
+                  <RecentEvents events={brief.recentEvents} />
+                </StaggerItem>
+              </StaggerContainer>
+            )}
+
+            {/* Asset Manager view */}
+            {!isExec && (
+              <div className="space-y-6">
+                <WeeklyHeadline
+                  headline={brief.headline}
+                  updatedAt={brief.updatedAt}
+                />
+
+                {/* Status counts grid with properties */}
                 <section>
-                  <h2 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
-                    Where risk is clustering
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {clusterTiles.map(tile => (
-                      <ClusterTile
-                        key={tile.id}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                    {postureTiles.map(tile => (
+                      <PostureTile
+                        key={tile.status}
                         tile={tile}
                         onClick={() => {
-                          const propertyId = tile.affectedPropertyIds[0];
-                          if (propertyId) {
-                            openPanel('cluster', propertyId, tile);
-                          }
+                          window.location.href = `/tenants?status=${tile.status}`;
                         }}
                       />
                     ))}
                   </div>
+
+                  {/* Your properties */}
+                  {propertiesWithChanges.length > 0 && (
+                    <div className="mt-4">
+                      <h3 className="text-xs text-muted-foreground mb-3">
+                        Your properties with changes
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {propertiesWithChanges.map(prop => (
+                          <PropertyTile
+                            key={prop.id}
+                            property={prop}
+                            onClick={() => openPanel('property', prop.id)}
+                          />
+                        ))}
+                      </div>
+                      {hasMoreProperties && (
+                        <button
+                          onClick={() => setShowAllProperties(!showAllProperties)}
+                          className="w-full mt-3 py-2 text-xs text-muted-foreground hover:text-foreground flex items-center justify-center gap-1 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors"
+                        >
+                          {showAllProperties ? 'Show less' : `View all ${brief.propertiesAttention?.length || 0} properties`}
+                          <ChevronRight className={`h-3 w-3 transition-transform ${showAllProperties ? '-rotate-90' : ''}`} />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </section>
-              </StaggerItem>
-            )}
 
-            {/* Section F: Recent Events */}
-            <StaggerItem>
-              <RecentEvents events={brief.recentEvents} />
-            </StaggerItem>
+                {/* Status changes */}
+                <StatusChanges changes={brief.statusChanges} />
 
-            {/* Section G: Questions to Raise */}
-            {questions.length > 0 && (
-              <StaggerItem>
-                <section>
-                  <h2 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
-                    Questions to raise
-                  </h2>
-                  <div className="space-y-2">
-                    {questions.map(question => (
-                      <button
-                        key={question.id}
-                        onClick={() => {
-                          const tenantId = question.relatedTenantIds[0];
-                          if (tenantId) {
-                            openPanel('tenant', tenantId);
-                          }
-                        }}
-                        className="w-full text-left p-3 rounded-lg bg-muted/30
-                                   hover:bg-muted/50 transition-colors"
-                      >
-                        <p className="text-sm">{question.text}</p>
-                      </button>
-                    ))}
-                  </div>
-                </section>
-              </StaggerItem>
-            )}
-
-            {/* Coverage statement */}
-            <StaggerItem>
-              <CoverageStatement coverage={brief.coverage} />
-            </StaggerItem>
-          </StaggerContainer>
-        )}
-
-        {/* Asset Manager view */}
-        {!isExec && (
-          <div className="space-y-6">
-            <WeeklyHeadline
-              headline={brief.headline}
-              updatedAt={brief.updatedAt}
-            />
-
-            {/* Status counts grid */}
-            <section>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {postureTiles.map(tile => (
-                  <PostureTile
-                    key={tile.status}
-                    tile={tile}
-                    onClick={() => {
-                      window.location.href = `/tenants?status=${tile.status}`;
-                    }}
-                  />
-                ))}
+                {/* Recent events */}
+                <RecentEvents events={brief.recentEvents} />
               </div>
-            </section>
-
-            {/* Status changes */}
-            <StatusChanges changes={brief.statusChanges} />
-
-            {/* Recent events */}
-            <RecentEvents events={brief.recentEvents} />
-
-            {/* Coverage statement */}
-            <CoverageStatement coverage={brief.coverage} />
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Global overlays */}

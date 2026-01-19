@@ -56,6 +56,7 @@ async def list_properties(
             city=prop.city,
             state=prop.state,
             asset_class=prop.asset_class,
+            image_url=prop.image_url,
             tenant_count=tenant_count,
             events_count=events_count,
         ))
@@ -143,6 +144,7 @@ async def get_property(
             city=prop.city,
             state=prop.state,
             asset_class=prop.asset_class,
+            image_url=prop.image_url,
         ),
         tenants=tenants,
         recent_events=[

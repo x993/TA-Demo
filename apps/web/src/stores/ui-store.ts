@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { DemoRole, PanelType } from "@/types";
+import type { DemoRole, PanelType, MonitoringStatus, ScanFrequency } from "@/types";
 import { setDemoRole } from "@/lib/api";
 
 interface UIState {
@@ -46,6 +46,19 @@ interface UIState {
   runDetailsModalOpen: boolean;
   openRunDetailsModal: () => void;
   closeRunDetailsModal: () => void;
+
+  // Mission Control / Monitoring state
+  monitoringStatus: MonitoringStatus;
+  scanFrequency: ScanFrequency;
+  lastScanTime: string;
+  nextScheduledScan: string;
+  scanProgress: number;
+  setMonitoringStatus: (status: MonitoringStatus) => void;
+  setScanFrequency: (frequency: ScanFrequency) => void;
+  toggleMonitoring: () => void;
+  startScan: () => void;
+  completeScan: () => void;
+  updateScanProgress: (progress: number) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -121,4 +134,30 @@ export const useUIStore = create<UIState>((set) => ({
   runDetailsModalOpen: false,
   openRunDetailsModal: () => set({ runDetailsModalOpen: true }),
   closeRunDetailsModal: () => set({ runDetailsModalOpen: false }),
+
+  // Mission Control / Monitoring state
+  monitoringStatus: 'active',
+  scanFrequency: 'hourly',
+  lastScanTime: new Date(Date.now() - 2 * 60 * 1000).toISOString(), // 2 min ago
+  nextScheduledScan: new Date(Date.now() + 58 * 60 * 1000).toISOString(), // 58 min from now
+  scanProgress: 0,
+  setMonitoringStatus: (status) => set({ monitoringStatus: status }),
+  setScanFrequency: (frequency) => set({ scanFrequency: frequency }),
+  toggleMonitoring: () =>
+    set((state) => ({
+      monitoringStatus: state.monitoringStatus === 'active' ? 'paused' : 'active',
+    })),
+  startScan: () =>
+    set({
+      monitoringStatus: 'scanning',
+      scanProgress: 0,
+    }),
+  completeScan: () =>
+    set({
+      monitoringStatus: 'active',
+      scanProgress: 100,
+      lastScanTime: new Date().toISOString(),
+      nextScheduledScan: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+    }),
+  updateScanProgress: (progress) => set({ scanProgress: progress }),
 }));

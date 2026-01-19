@@ -34,7 +34,11 @@ export function PropertyTile({ property, onClick }: PropertyTileProps) {
 
         {/* Status badge */}
         <div className="absolute top-2 right-2">
-          <StatusBadge status={property.status} size="sm" />
+          <StatusBadge
+            status={property.status}
+            size="sm"
+            className="bg-background/95 backdrop-blur-sm shadow-sm border-border/50"
+          />
         </div>
       </div>
 

@@ -27,6 +27,7 @@ class Property(Base):
     city: Mapped[str] = mapped_column(String(100))
     state: Mapped[str] = mapped_column(String(50))
     asset_class: Mapped[str] = mapped_column(String(50))  # Retail, Office, Industrial, etc.
+    image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=datetime.utcnow

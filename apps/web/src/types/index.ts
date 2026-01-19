@@ -255,3 +255,19 @@ export interface CoverageSettings {
   global: CoverageToggle[];
   tenantOverrides: Record<string, CoverageToggle[]>;
 }
+
+// === MISSION CONTROL / MONITORING TYPES ===
+
+export type MonitoringStatus = 'active' | 'paused' | 'scanning';
+
+export type ScanFrequency = 'continuous' | 'hourly' | 'daily' | 'weekly';
+
+export interface MonitoringState {
+  status: MonitoringStatus;
+  frequency: ScanFrequency;
+  lastScanTime: string;
+  nextScheduledScan: string;
+  scanProgress: number; // 0-100 when scanning
+  sourcesActive: number;
+  sourcesTotal: number;
+}

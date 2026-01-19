@@ -67,6 +67,17 @@ class ConcentrationInsight(CamelModel):
     affected_tenant_ids: list[str]
 
 
+class PropertyAttentionItem(CamelModel):
+    """Property requiring attention, shown in dashboard tiles."""
+    id: str
+    name: str
+    city: str
+    state: str
+    image_url: str | None = None
+    status: str  # 'critical' | 'watch' | 'stable' | 'improving'
+    issues_count: int
+
+
 class BriefResponse(CamelModel):
     id: str
     as_of_date: str
@@ -76,6 +87,8 @@ class BriefResponse(CamelModel):
     status_changes: StatusChangesResponse
     recent_events: list[EventResponse]
     coverage: CoverageResponse
+    # Properties requiring attention
+    properties_attention: list[PropertyAttentionItem] | None = None
     # Executive layer (optional - present for exec role)
     portfolio_verdict: PortfolioVerdict | None = None
     narrative_bullets: list[NarrativeBullet] | None = None

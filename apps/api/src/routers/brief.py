@@ -24,6 +24,7 @@ from src.schemas.brief import (
     PortfolioVerdict,
     NarrativeBullet,
     ConcentrationInsight,
+    PropertyAttentionItem,
 )
 from src.validators.memo_validator import is_event_valid_for_display
 
@@ -201,6 +202,51 @@ async def get_executive_brief(
     tenants_with_events_result = await db.execute(tenants_with_events_query)
     tenants_with_disclosures = tenants_with_events_result.scalar() or 0
 
+    # Build properties attention list
+    properties_query = select(Property).order_by(Property.name)
+    properties_result = await db.execute(properties_query)
+    all_properties = properties_result.scalars().all()
+
+    properties_attention = []
+    for prop in all_properties:
+        # Get worst status among tenants at this property
+        tenant_status_query = (
+            select(TenantScoreSnapshot.status)
+            .join(Lease, Lease.tenant_id == TenantScoreSnapshot.tenant_id)
+            .where(
+                Lease.property_id == prop.id,
+                TenantScoreSnapshot.as_of_date == brief.as_of_date
+            )
+        )
+        status_result = await db.execute(tenant_status_query)
+        statuses = [s for (s,) in status_result.all()]
+
+        # Determine property status based on worst tenant status
+        if "critical" in statuses:
+            prop_status = "critical"
+        elif "watch" in statuses:
+            prop_status = "watch"
+        elif "improving" in statuses:
+            prop_status = "improving"
+        else:
+            prop_status = "stable"
+
+        # Count issues (critical + watch tenants)
+        issues_count = sum(1 for s in statuses if s in ("critical", "watch"))
+
+        properties_attention.append(PropertyAttentionItem(
+            id=str(prop.id),
+            name=prop.name,
+            city=prop.city,
+            state=prop.state,
+            image_url=prop.image_url,
+            status=prop_status,
+            issues_count=issues_count,
+        ))
+
+    # Sort by issues (most issues first)
+    properties_attention.sort(key=lambda p: -p.issues_count)
+
     # Build base response
     response = BriefResponse(
         id=str(brief.id),
@@ -225,6 +271,7 @@ async def get_executive_brief(
             "sources": ["SEC EDGAR", "Reuters", "Court Records"],
             "as_of_date": brief.as_of_date.isoformat(),
         },
+        properties_attention=properties_attention,
     )
 
     # Add executive layer fields for exec role only

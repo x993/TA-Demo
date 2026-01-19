@@ -7,6 +7,7 @@ class PropertyResponse(CamelModel):
     city: str
     state: str
     asset_class: str
+    image_url: str | None = None
     tenant_count: int
     events_count: int
 
@@ -40,6 +41,7 @@ class PropertyBasicResponse(CamelModel):
     city: str
     state: str
     asset_class: str
+    image_url: str | None = None
 
 
 class PropertyDetailResponse(CamelModel):
