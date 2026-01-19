@@ -625,33 +625,53 @@ This output is what drives the UI + scoring.
   "why_it_matters": ["bullet1", "bullet2", "bullet3"],
   "recommended_actions": ["bullet1", "bullet2", "bullet3"],
   "what_to_watch_next": ["bullet1", "bullet2"],
+
   "citations": [
     {
       "claim": "Covenant relief was obtained and pricing increased.",
       "evidence_id": "uuid",
-      "url": "https://..."
+      "quote_spans": [
+        { "field": "excerpt", "start": 34, "end": 96 }
+      ],
+      "quote_text": "…covenant relief… increased pricing…"
     }
   ],
+
   "evidence_classifications": [
     {
       "evidence_id": "uuid",
+      "source_tier": 1,  // 1 = SEC/PR, 2 = major news, 3 = other
       "material": true,
       "reason": "1 sentence",
       "signals": ["covenant_relief", "pricing_increase"]
     }
+  ],
+
+  "unknowns": [
+    "No bond maturity schedule present in evidence; cannot assess refinancing wall."
   ]
 }
 ```
 
+**Citation requirements:**
+* Every sentence in `what_changed` must have ≥1 citation
+* Every bullet in `why_it_matters` must have ≥1 citation
+* `quote_text` must exist verbatim in the referenced evidence
+* `quote_spans` must align with stored text
+
+**Unknowns:** Model must explicitly report what it cannot determine from provided evidence.
+
 ## 7.3 Prompting strategy (so it behaves like a credit analyst)
 
-* System: “You are a senior credit analyst for CRE tenancy risk. You must be conservative. No speculation. Every material claim must cite evidence_id.”
+* System: "You are a senior credit analyst for CRE tenancy risk. You must be conservative. No speculation. You may only use the evidence items provided. Every material claim must cite evidence_id with exact quote_text. If information is missing, add to unknowns array."
 * Hard constraints:
 
   * Max bullets
   * Max sentence lengths
   * Must output valid JSON
+  * Every claim requires quote-anchored citation
   * If weak evidence → `material_event=false` + short explanation
+  * If cannot cite → must go in `unknowns`, not in memo text
 
 ## 7.4 Executive Portfolio Brief Schema (portfolio-level adjudication)
 
@@ -754,24 +774,167 @@ Once per snapshot (e.g., weekly), run a **portfolio-level synthesis** to generat
   * If no systemic pattern exists, say so explicitly (e.g., "risks are unrelated and isolated")
   * Include coverage stats (tenants reviewed vs surfaced)
 
-## 7.5 Precompute workflow
+## 7.5 Evidence Grounding & Hallucination Prevention
+
+**Golden rule:** The model must only talk about evidence we provide, and every claim must be provably traceable to that evidence.
+
+### 7.5.1 Closed-world evidence
+
+For each tenant run, the LLM receives:
+* A tenant entity card
+* An Evidence Pack (3–10 items)
+* Nothing else
+
+System instruction (non-negotiable):
+* "You may only use the evidence items provided."
+* "If it isn't in the evidence pack, you must say `unknown`."
+* "Every material claim must cite `evidence_id`."
+* "If you cannot cite, set `material_event=false`."
+
+The model must also report gaps:
+```json
+"unknowns": [
+  "No bond maturity schedule present in evidence; cannot assess refinancing wall.",
+  "No rating agency action included; cannot confirm downgrade."
+]
+```
+
+### 7.5.2 Machine-verifiable citations (not just URLs)
+
+Weak citation: a URL in text.
+Strong citation: claims mapped to evidence_id with verified quote spans.
+
+**Required citation structure:**
+
+```json
+{
+  "claim": "Covenant relief was obtained and pricing increased.",
+  "evidence_id": "uuid",
+  "quote_spans": [
+    { "field": "excerpt", "start": 34, "end": 96 }
+  ],
+  "quote_text": "…covenant relief… increased pricing…"
+}
+```
+
+The model must "point" into text we already have. Then we programmatically verify:
+* `quote_text` exists verbatim inside `EvidenceSource.excerpt` or `raw_text`
+* `start`/`end` align
+* `evidence_id` exists and belongs to that tenant
+
+If verification fails → memo rejected, never appears.
+
+### 7.5.3 Deterministic validation pipeline
+
+Nothing reaches UI without passing checks:
+
+1. Build evidence pack
+2. LLM generates JSON
+3. **Validator runs (deterministic)**
+4. If pass → save Event + Memo
+5. If fail → drop + log
+
+**Validator checks (must-haves):**
+
+| Check | Rule |
+|-------|------|
+| Schema validity | Strict JSON schema compliance |
+| Evidence ID integrity | Each cited `evidence_id` exists and belongs to same tenant |
+| Quote verification | `quote_text` is substring of stored text, or spans align |
+| Claim coverage | Every sentence in `what_changed` has ≥1 citation |
+| Bullet coverage | Every bullet in `why_it_matters` has ≥1 citation |
+| No uncited named entities | Numbers, dates, dollar amounts, lender names must be cited |
+| Source type rules | `sec_material_disclosure` requires ≥1 `sec_filing` source |
+
+**Hard reject on any failure.**
+
+### 7.5.4 Two-model pattern: extract first, reason second
+
+Reduces hallucinations significantly by separating fact extraction from judgment.
+
+**Step A — Evidence extraction (cheap model or rules)**
+
+For each evidence item, extract factual statements with quotes:
+
+```json
+{
+  "evidence_id": "uuid",
+  "facts": [
+    {
+      "fact": "Company amended credit agreement to obtain covenant relief.",
+      "quote_text": "…amended the Credit Agreement… covenant relief…",
+      "source_field": "raw_text"
+    }
+  ]
+}
+```
+
+**Step B — Adjudication (Gemini 3 Pro)**
+
+Judge model receives:
+* Tenant card
+* Extracted facts (each already anchored by quotes)
+
+The judge operates on a clean fact table — no temptation to invent details.
+
+### 7.5.5 Source tier policy
+
+Define source credibility tiers:
+
+| Tier | Sources |
+|------|---------|
+| Tier 1 | SEC filings (EDGAR), company press releases |
+| Tier 2 | Reuters, WSJ, FT, Bloomberg (licensed) |
+| Tier 3 | Everything else |
+
+**Enforcement rules:**
+* Critical events require ≥1 Tier 1 or Tier 2 source
+* Tier 3-only evidence can never generate "Critical" severity
+* Source tier displayed in UI for transparency
+
+### 7.5.6 Entity resolution confidence gating
+
+Prevent attaching wrong news to wrong tenant (e.g., wrong "Acme").
+
+* If entity resolution confidence < threshold:
+  * Do not auto-attach
+  * Require manual confirm flag OR exclude from surfaced items
+
+For demo: curate dataset to avoid ambiguity.
+For production: confidence gate is mandatory.
+
+### 7.5.7 UI "show your work" pattern
+
+Trust improves when provenance is obvious:
+
+* Every memo shows: "Based on: 1 filing, 2 reputable news sources"
+* Evidence button shows cited sources first (not all sources)
+* Quote highlights in evidence viewer
+
+Citations become a product feature, not just an audit trail.
+
+---
+
+## 7.6 Precompute workflow
 
 * For each tenant in demo universe:
 
   1. Build evidence pack
-  2. Run adjudication
-  3. Validate JSON schema
-  4. Create `Event` if material and above thresholds
-  5. Compute tenant score snapshots
+  2. **Extract facts with quotes** (Step A)
+  3. **Run adjudication on fact table** (Step B)
+  4. **Validate against all checks** (7.5.3)
+  5. If pass: create `Event` + store memo
+  6. If fail: log rejection reason, do not surface
+  7. Compute tenant score snapshots
 
 * For portfolio (once per snapshot):
 
-  6. Aggregate all material events
-  7. Run portfolio-level synthesis
-  8. Validate executive brief schema
-  9. Store `PortfolioBriefSnapshot`
+  8. Aggregate all material events
+  9. Run portfolio-level synthesis
+  10. Validate executive brief schema
+  11. Store `PortfolioBriefSnapshot`
 
-*(The demo app never calls the model.)*
+*(The demo app never calls the model. All validation happens at precompute time.)*
 
 ---
 
