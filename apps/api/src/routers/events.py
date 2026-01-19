@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -8,9 +8,11 @@ from sqlalchemy.orm import selectinload
 from src.database import get_db
 from src.demo_auth import get_demo_user, DemoUser
 from src.models import Event, EvidenceSource, Tenant, Lease, Property
+from src.responses import CamelRouter
 from src.schemas.event import EventDetailResponse, EvidenceResponse
+from src.validators.memo_validator import validate_memo
 
-router = APIRouter(tags=["events"])
+router = CamelRouter(tags=["events"])
 
 
 @router.get("/events/{event_id}", response_model=EventDetailResponse)
@@ -53,6 +55,9 @@ async def get_event(
             "what_was_disclosed": event.memo_what_disclosed,
             "key_details": event.memo_key_details or [],
             "context": event.memo_context or [],
+            "why_it_matters": event.memo_why_it_matters,
+            "recommended_actions": event.memo_recommended_actions or [],
+            "what_to_watch": event.memo_what_to_watch or [],
         } if event.memo_what_disclosed else None,
         evidence_count=len(event.evidence_sources),
         properties=[{"id": str(p.id), "name": p.name} for p in properties],

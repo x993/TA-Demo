@@ -1,7 +1,7 @@
 from datetime import date
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import Depends, HTTPException, Query
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -16,9 +16,18 @@ from src.models import (
     Lease,
     Property,
 )
-from src.schemas.brief import BriefResponse, StatusChangesResponse, EventResponse
+from src.responses import CamelRouter
+from src.schemas.brief import (
+    BriefResponse,
+    StatusChangesResponse,
+    EventResponse,
+    PortfolioVerdict,
+    NarrativeBullet,
+    ConcentrationInsight,
+)
+from src.validators.memo_validator import is_event_valid_for_display
 
-router = APIRouter(tags=["brief"])
+router = CamelRouter(tags=["brief"])
 
 
 @router.get("/brief", response_model=BriefResponse)
@@ -136,14 +145,18 @@ async def get_executive_brief(
         .options(selectinload(Event.tenant), selectinload(Event.evidence_sources))
         .where(Event.event_date >= brief.as_of_date - timedelta(days=7))
         .order_by(Event.event_date.desc())
-        .limit(7)
+        .limit(15)  # Fetch more to allow for AM filtering
     )
     events_result = await db.execute(events_query)
     recent_events = events_result.scalars().all()
 
-    # Build event responses with property info
+    # Build event responses with property info (filter invalid events)
     event_responses = []
     for event in recent_events:
+        # Skip events that fail validation
+        if not is_event_valid_for_display(event):
+            continue
+
         # Get properties for this tenant
         lease_query = (
             select(Property)
@@ -152,6 +165,12 @@ async def get_executive_brief(
         )
         lease_result = await db.execute(lease_query)
         properties = lease_result.scalars().all()
+
+        # AM filtering: only show events for tenants at assigned properties
+        if user.is_am:
+            tenant_property_ids = [str(p.id) for p in properties]
+            if not any(pid in user.assigned_property_ids for pid in tenant_property_ids):
+                continue
 
         event_responses.append(EventResponse(
             id=str(event.id),
@@ -164,6 +183,10 @@ async def get_executive_brief(
             evidence_count=len(event.evidence_sources),
             properties=[{"id": str(p.id), "name": p.name} for p in properties],
         ))
+
+        # Limit to 7 events for display
+        if len(event_responses) >= 7:
+            break
 
     # Count tenants monitored
     tenant_count_query = select(func.count(Tenant.id))
@@ -178,7 +201,8 @@ async def get_executive_brief(
     tenants_with_events_result = await db.execute(tenants_with_events_query)
     tenants_with_disclosures = tenants_with_events_result.scalar() or 0
 
-    return BriefResponse(
+    # Build base response
+    response = BriefResponse(
         id=str(brief.id),
         as_of_date=brief.as_of_date.isoformat(),
         headline=brief.headline,
@@ -202,3 +226,20 @@ async def get_executive_brief(
             "as_of_date": brief.as_of_date.isoformat(),
         },
     )
+
+    # Add executive layer fields for exec role only
+    if user.is_exec:
+        if brief.portfolio_verdict:
+            response.portfolio_verdict = PortfolioVerdict(**brief.portfolio_verdict)
+        if brief.narrative_bullets:
+            response.narrative_bullets = [
+                NarrativeBullet(**b) for b in brief.narrative_bullets
+            ]
+        if brief.concentration_insights:
+            response.concentration_insights = [
+                ConcentrationInsight(**c) for c in brief.concentration_insights
+            ]
+        if brief.exec_questions:
+            response.exec_questions = brief.exec_questions
+
+    return response

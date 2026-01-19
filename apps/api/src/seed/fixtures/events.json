@@ -1,0 +1,365 @@
+[
+  {
+    "id": "d0000001-0000-0000-0000-000000000001",
+    "tenant_id": "b0000001-0000-0000-0000-000000000001",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-14",
+    "headline": "Apex Retail discloses going concern warning and covenant breach in Q3 10-Q",
+    "memo_what_disclosed": "The company filed its Q3 2025 10-Q with the SEC, disclosing substantial doubt about its ability to continue as a going concern. The filing also indicates the company was not in compliance with its debt service coverage ratio covenant as of September 30, 2025, and is in active negotiations with lenders for a forbearance agreement.",
+    "memo_key_details": [
+      {"fact": "Going concern language included in Note 1 to financial statements", "citation": "10-Q, p.12"},
+      {"fact": "Debt service coverage ratio covenant breached as of Sept 30, 2025", "citation": "10-Q, p.47"},
+      {"fact": "Same-store sales declined 18% year-over-year", "citation": "10-Q, p.23"},
+      {"fact": "Company in active discussions with lenders regarding forbearance", "citation": "8-K, Item 8.01"}
+    ],
+    "memo_context": [
+      "This tenant occupies space at 2 properties in the portfolio",
+      "Anchor tenant at both Park Plaza (35% rent share) and Southfield Retail Center (40% rent share)"
+    ],
+    "memo_why_it_matters": "Going concern warnings signal heightened bankruptcy risk within 12 months. As an anchor tenant at two properties representing significant rent share, any rent relief request or Chapter 11 filing would materially impact NOI and property valuations.",
+    "memo_recommended_actions": [
+      "Request meeting with tenant management to understand forbearance negotiation timeline",
+      "Review lease terms for any co-tenancy clauses that could trigger if Apex vacates",
+      "Begin preliminary discussions with leasing team on replacement tenant pipeline"
+    ],
+    "memo_what_to_watch": [
+      "Q4 2025 10-Q filing (expected Feb 2026) for forbearance resolution or escalation",
+      "Any 8-K filings indicating liquidity events, asset sales, or restructuring announcements"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000002",
+    "tenant_id": "b0000001-0000-0000-0000-000000000002",
+    "event_type": "press_release",
+    "event_date": "2026-01-13",
+    "headline": "Northstar Apparel announces store closure program and explores strategic alternatives including potential Chapter 11",
+    "memo_what_disclosed": "Northstar Apparel announced plans to close 150 of its 400 stores nationwide and retained Kirkland & Ellis to explore strategic alternatives, including a potential Chapter 11 filing. The company's revolving credit facility was fully drawn and liquidity is projected to be exhausted by Q2 2026.",
+    "memo_key_details": [
+      {"fact": "Plans to close approximately 150 underperforming locations", "citation": "Press Release, Jan 13"},
+      {"fact": "Retained Kirkland & Ellis LLP and Lazard to advise on strategic alternatives", "citation": "Press Release, Jan 13"},
+      {"fact": "Available liquidity expected to be insufficient beyond Q2 2026", "citation": "8-K, Item 2.02"}
+    ],
+    "memo_context": [
+      "Northstar occupies space at Park Plaza (Suite 200) and Willowbrook Plaza (Suite 100)",
+      "Store closure list not yet released — portfolio locations may be affected"
+    ],
+    "memo_why_it_matters": "Retention of Kirkland & Ellis signals serious consideration of bankruptcy. The Q2 2026 liquidity runway creates a 4-6 month window before potential filing. Store closure decisions will directly impact portfolio properties.",
+    "memo_recommended_actions": [
+      "Contact tenant to understand if portfolio locations are on closure list",
+      "Review lease rejection exposure in potential bankruptcy scenario",
+      "Engage property management to identify replacement tenant candidates"
+    ],
+    "memo_what_to_watch": [
+      "Store closure list publication (expected within 30 days)",
+      "Any DIP financing announcements indicating Chapter 11 filing imminent"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000003",
+    "tenant_id": "b0000001-0000-0000-0000-000000000019",
+    "event_type": "news",
+    "event_date": "2026-01-15",
+    "headline": "Urban Fitness abruptly closes 8 locations citing cash flow challenges; landlord lawsuits filed",
+    "memo_what_disclosed": "Urban Fitness Collective, a private regional fitness chain, abruptly closed 8 of its 12 locations this week without notice to landlords. Multiple landlords have filed lawsuits for breach of lease. Local news reports indicate the company failed to make January rent payments at most locations.",
+    "memo_key_details": [
+      {"fact": "8 of 12 locations closed without warning", "citation": "Detroit Free Press, Jan 15"},
+      {"fact": "At least five landlords filed lawsuits seeking unpaid rent totaling over $2.3 million", "citation": "Austin Business Journal, Jan 16"},
+      {"fact": "Handwritten signs citing 'cash flow challenges' posted at closed locations", "citation": "Detroit Free Press, Jan 15"}
+    ],
+    "memo_context": [
+      "Urban Fitness occupies space at Southfield Retail Center (Suite 300) and Willowbrook Plaza (Suite 200)",
+      "Private company with limited financial visibility"
+    ],
+    "memo_why_it_matters": "Abrupt closures without landlord notice indicate severe distress and potential insolvency. Missed January rent payments suggest immediate cash flow crisis. Recovery prospects are limited for private operators in this situation.",
+    "memo_recommended_actions": [
+      "Verify January rent payment status for portfolio locations immediately",
+      "Issue default notice and begin lease termination process if rent unpaid",
+      "Coordinate with legal counsel on potential litigation for unpaid rent and damages"
+    ],
+    "memo_what_to_watch": [
+      "Any bankruptcy filing that would trigger automatic stay on collections",
+      "Status of remaining 4 open locations as indicator of total liquidation risk"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000004",
+    "tenant_id": "b0000001-0000-0000-0000-000000000003",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-10",
+    "headline": "Meridian Healthcare amends credit facility with tighter covenants and pricing increase",
+    "memo_what_disclosed": "Meridian Healthcare disclosed an amendment to its senior credit facility that provides covenant relief but increases pricing by 75 basis points and adds new financial reporting requirements. The company narrowly avoided a covenant breach in Q3.",
+    "memo_key_details": [
+      {"fact": "Waiver of Total Leverage Ratio covenant for Q3 2025", "citation": "8-K, Credit Agreement Amendment"},
+      {"fact": "Applicable margin increased by 0.75%", "citation": "8-K, Credit Agreement Amendment"}
+    ],
+    "memo_context": [
+      "Meridian occupies space at Riverside Tower (Floors 8-10) and Metropolitan Center (Floor 12)",
+      "Healthcare sector facing reimbursement headwinds"
+    ],
+    "memo_why_it_matters": "Covenant amendments with pricing increases indicate deteriorating credit quality and lender concern. While not immediately critical, the trajectory suggests potential escalation if operating performance doesn't improve.",
+    "memo_recommended_actions": [
+      "Add tenant to quarterly credit review list",
+      "Review lease security deposits and guarantees on file"
+    ],
+    "memo_what_to_watch": [
+      "Q4 2025 results to see if covenant compliance is restored",
+      "Healthcare sector reimbursement policy changes"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000005",
+    "tenant_id": "b0000001-0000-0000-0000-000000000004",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-12",
+    "headline": "TechFlow cuts FY26 guidance by 20% citing enterprise spending slowdown",
+    "memo_what_disclosed": "TechFlow Solutions reduced its FY26 revenue guidance from $450M to $360M, citing delayed enterprise deals and longer sales cycles. The company also announced a 15% workforce reduction.",
+    "memo_key_details": [
+      {"fact": "FY26 revenue guidance reduced to $350-$370 million from prior $440-$460 million", "citation": "8-K, Guidance Update"},
+      {"fact": "15% workforce reduction announced", "citation": "TechCrunch, Jan 12"}
+    ],
+    "memo_context": [
+      "TechFlow occupies space at Lakewood Business Park (Building B) and Summit Technology Park (Suite 500)",
+      "May seek lease modifications or early termination"
+    ],
+    "memo_why_it_matters": "A 20% guidance cut combined with workforce reduction signals significant business contraction. Tech tenants often seek lease modifications or early terminations during downsizing cycles.",
+    "memo_recommended_actions": [
+      "Proactively contact tenant to understand space utilization plans",
+      "Review early termination or sublease provisions in lease"
+    ],
+    "memo_what_to_watch": [
+      "Any sublease marketing activity for current space",
+      "Q1 2026 results for signs of stabilization or further deterioration"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000006",
+    "tenant_id": "b0000001-0000-0000-0000-000000000005",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-08",
+    "headline": "Continental Logistics loses major Amazon contract, stock drops 25%",
+    "memo_what_disclosed": "Continental Logistics announced that Amazon will not renew its delivery services contract, which represented 30% of the company's revenue. The contract expires in June 2026.",
+    "memo_key_details": [
+      {"fact": "Amazon.com Services LLC will not renew Delivery Service Partner Agreement", "citation": "8-K, Material Contract"},
+      {"fact": "Contract represented approximately 30% of consolidated revenues", "citation": "8-K, Material Contract"},
+      {"fact": "Contract expires June 30, 2026", "citation": "8-K, Material Contract"}
+    ],
+    "memo_context": [
+      "Continental occupies significant space at Gateway Industrial Complex (Warehouse A, 40% rent share) and Crossroads Distribution Hub (Building 1, 50% rent share)"
+    ],
+    "memo_why_it_matters": "Loss of 30% revenue creates substantial risk of lease modification requests or inability to meet rent obligations. The June 2026 contract expiry provides ~5 months to assess replacement revenue strategy.",
+    "memo_recommended_actions": [
+      "Schedule call with tenant management to understand revenue replacement plans",
+      "Assess financial covenant compliance risk under current lease",
+      "Begin contingency planning for potential space recovery"
+    ],
+    "memo_what_to_watch": [
+      "Any announcements of new customer wins or contract extensions",
+      "Q1 2026 earnings for operational plan to offset Amazon loss"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000007",
+    "tenant_id": "b0000001-0000-0000-0000-000000000006",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-06",
+    "headline": "Vertex Financial faces SEC investigation over accounting practices",
+    "memo_what_disclosed": "Vertex Financial disclosed receipt of an SEC subpoena related to revenue recognition practices in its advisory business. The company stated it is cooperating with the investigation.",
+    "memo_key_details": [
+      {"fact": "SEC subpoena received January 3, 2026 relating to revenue recognition practices", "citation": "8-K, Legal Proceedings"},
+      {"fact": "Company is cooperating fully with the SEC", "citation": "8-K, Legal Proceedings"}
+    ],
+    "memo_context": [
+      "Vertex occupies premium floors at Riverside Tower (Floors 15-18, 25% rent share)",
+      "Investigation timeline uncertain — could persist for years"
+    ],
+    "memo_why_it_matters": "SEC investigations create headline risk and can result in fines, management changes, or business disruption. While not an immediate credit event, investigations often signal underlying issues that may surface later.",
+    "memo_recommended_actions": [
+      "Monitor for any restatement announcements or management changes",
+      "No immediate action required but add to watch list"
+    ],
+    "memo_what_to_watch": [
+      "Any accounting restatements or auditor changes",
+      "Progress updates on SEC investigation timeline"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000008",
+    "tenant_id": "b0000001-0000-0000-0000-000000000015",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-11",
+    "headline": "Sterling Media draws down revolver, hires restructuring advisor",
+    "memo_what_disclosed": "Sterling Media Group fully drew its $150M revolving credit facility and engaged Alvarez & Marsal as a financial advisor. The company cited 'proactive balance sheet management' but the moves suggest liquidity pressure.",
+    "memo_key_details": [
+      {"fact": "Drew remaining $150 million available under revolving credit facility", "citation": "8-K, Liquidity Update"},
+      {"fact": "Retained Alvarez & Marsal as restructuring advisor", "citation": "Variety, Jan 12"}
+    ],
+    "memo_context": [
+      "Sterling occupies 3 floors at Harbor Point Office Tower (Floors 10-12, 35% rent share)",
+      "Media sector facing structural headwinds"
+    ],
+    "memo_why_it_matters": "Full revolver draw combined with restructuring advisor engagement is a classic early warning signal. A&M engagement often precedes formal restructuring processes within 6-12 months.",
+    "memo_recommended_actions": [
+      "Elevate to critical watch status immediately",
+      "Review lease terms for any early termination triggers",
+      "Begin preliminary replacement tenant search"
+    ],
+    "memo_what_to_watch": [
+      "Any announcement of asset sales or strategic alternatives",
+      "Monthly cash burn updates if disclosed"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000009",
+    "tenant_id": "b0000001-0000-0000-0000-000000000022",
+    "event_type": "court_filing",
+    "event_date": "2026-01-09",
+    "headline": "Harmony Wellness owner facing personal bankruptcy, business continuity uncertain",
+    "memo_what_disclosed": "Local court filings reveal that the principal owner of Harmony Wellness Spa has filed for personal Chapter 7 bankruptcy, listing significant personal guarantees on business debts. The spa's operating status is uncertain.",
+    "memo_key_details": [
+      {"fact": "Owner filed personal Chapter 7 bankruptcy listing debts over $1.2 million", "citation": "U.S. Bankruptcy Court W.D. Texas, Jan 9"},
+      {"fact": "Debts include personal guarantees on business leases", "citation": "Austin American-Statesman, Jan 10"}
+    ],
+    "memo_context": [
+      "Harmony Wellness occupies space at Willowbrook Plaza (Suite 300, 20% rent share)",
+      "Part of P9 tenant mix already stressed by Northstar and Urban Fitness"
+    ],
+    "memo_why_it_matters": "Personal bankruptcy of a small business owner typically leads to business closure. Personal guarantee value is now effectively zero, eliminating a key credit enhancement.",
+    "memo_recommended_actions": [
+      "Verify current rent payment status and business operations",
+      "Prepare for potential lease termination and space recovery",
+      "Update Willowbrook Plaza risk assessment given multiple stressed tenants"
+    ],
+    "memo_what_to_watch": [
+      "Any notice of business closure or assignment for benefit of creditors",
+      "January rent payment status"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000010",
+    "tenant_id": "b0000001-0000-0000-0000-000000000007",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-07",
+    "headline": "BlueSky raises FY26 guidance after record Q3, announces facility expansion",
+    "memo_what_disclosed": "BlueSky Manufacturing reported record Q3 results, beating estimates by 15%, and raised FY26 guidance by 20%. The company announced plans to expand its Phoenix facility, which would increase its footprint at Gateway Industrial Complex.",
+    "memo_key_details": [
+      {"fact": "Q3 2025 revenue of $285 million exceeded guidance of $245-$250 million", "citation": "8-K, Earnings Release"},
+      {"fact": "FY26 revenue guidance raised to $1.15-$1.20 billion from $950 million-$1.0 billion", "citation": "8-K, Earnings Release"},
+      {"fact": "Plans to expand Phoenix manufacturing facility by 150,000 square feet", "citation": "Press Release, Jan 8"}
+    ],
+    "memo_context": [
+      "BlueSky occupies Warehouse B at Gateway Industrial Complex (35% rent share)",
+      "Expansion plans suggest long-term commitment to the property"
+    ],
+    "memo_why_it_matters": "Strong operating momentum and expansion plans signal tenant stability and potential for additional lease revenue. This positive event partially offsets Continental Logistics risk at the same property.",
+    "memo_recommended_actions": [
+      "Proactively engage tenant on expansion space requirements",
+      "Explore early lease extension discussions to lock in tenancy"
+    ],
+    "memo_what_to_watch": [
+      "Timing and terms of expansion announcement",
+      "Continued operational momentum in Q4 results"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000011",
+    "tenant_id": "b0000001-0000-0000-0000-000000000008",
+    "event_type": "sec_filing",
+    "event_date": "2026-01-05",
+    "headline": "Granite Construction completes debt refinancing, extends maturities to 2031",
+    "memo_what_disclosed": "Granite Construction successfully refinanced its entire debt stack, extending maturities from 2027 to 2031 and reducing interest expense by $15M annually. Credit rating upgraded to BB+ from BB.",
+    "memo_key_details": [
+      {"fact": "Refinancing extends maturity date to January 2031", "citation": "8-K, Debt Refinancing"},
+      {"fact": "Interest rate margin reduced by 50 basis points", "citation": "8-K, Debt Refinancing"},
+      {"fact": "S&P upgraded rating to BB+ from BB", "citation": "Construction Dive, Jan 6"}
+    ],
+    "memo_context": [
+      "Granite is 50% of rent at Crossroads Distribution Hub (Building 2)",
+      "Improved balance sheet reduces risk for that property"
+    ],
+    "memo_why_it_matters": "Successful refinancing with improved terms and rating upgrade indicates strengthening credit profile. Maturity extension to 2031 provides long-term stability for this significant tenant.",
+    "memo_recommended_actions": [
+      "Update internal credit rating to reflect improved status",
+      "Consider lease extension discussions given improved tenant credit"
+    ],
+    "memo_what_to_watch": [
+      "Continued infrastructure spending trends supporting construction sector",
+      "Maintenance of improved credit metrics"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000012",
+    "tenant_id": "b0000001-0000-0000-0000-000000000014",
+    "event_type": "press_release",
+    "event_date": "2026-01-09",
+    "headline": "Redwood Pharma announces FDA approval for lead drug, stock surges 40%",
+    "memo_what_disclosed": "Redwood Pharmaceuticals received FDA approval for its lead oncology drug, a major de-risking event. The company announced plans to double its commercial team and expand headquarters operations.",
+    "memo_key_details": [
+      {"fact": "FDA approved REDX-101 for treatment of advanced non-small cell lung cancer", "citation": "Press Release, Jan 9"},
+      {"fact": "Company plans to significantly expand commercial organization and headquarters", "citation": "Press Release, Jan 9"}
+    ],
+    "memo_context": [
+      "Redwood occupies Suite 800 at Summit Technology Park (30% rent share)",
+      "Expansion plans suggest increased space needs"
+    ],
+    "memo_why_it_matters": "FDA approval is a transformational de-risking event for biotech tenants, significantly reducing business failure risk. Expansion plans indicate potential for additional lease revenue.",
+    "memo_recommended_actions": [
+      "Proactively engage tenant on expansion space requirements",
+      "Explore early lease extension or expansion discussions"
+    ],
+    "memo_what_to_watch": [
+      "Commercial launch timeline and early sales metrics",
+      "Specific space expansion requirements and timing"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  },
+  {
+    "id": "d0000001-0000-0000-0000-000000000013",
+    "tenant_id": "b0000001-0000-0000-0000-000000000025",
+    "event_type": "news",
+    "event_date": "2026-01-11",
+    "headline": "Quantum Data closes $50M Series C funding, achieves profitability",
+    "memo_what_disclosed": "Quantum Data Systems, a private AI infrastructure company, closed a $50M Series C round and announced it achieved profitability for the first time in Q4 2025. The company plans to expand its engineering team.",
+    "memo_key_details": [
+      {"fact": "Raised $50 million in Series C funding led by Sequoia Capital", "citation": "TechCrunch, Jan 11"},
+      {"fact": "Achieved profitability in Q4 2025", "citation": "TechCrunch, Jan 11"}
+    ],
+    "memo_context": [
+      "Quantum Data occupies Suite 200 at Summit Technology Park (20% rent share)",
+      "May seek additional space as engineering team grows"
+    ],
+    "memo_why_it_matters": "Achieving profitability combined with fresh funding significantly reduces tenant risk. Private tech tenants with profitability and strong investor backing represent stable credit profiles.",
+    "memo_recommended_actions": [
+      "Update internal credit assessment to reflect improved profile",
+      "Proactively discuss expansion needs with tenant"
+    ],
+    "memo_what_to_watch": [
+      "Continued profitability in subsequent quarters",
+      "Specific hiring and space expansion plans"
+    ],
+    "memo_validated": true,
+    "validation_errors": null
+  }
+]

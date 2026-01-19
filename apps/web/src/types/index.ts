@@ -62,6 +62,10 @@ export interface EventMemo {
   whatWasDisclosed: string;
   keyDetails: MemoDetail[];
   context: string[];
+  // Action sections
+  whyItMatters?: string;
+  recommendedActions?: string[];
+  whatToWatch?: string[];
 }
 
 export interface MemoDetail {
@@ -86,6 +90,26 @@ export interface PropertyBadge {
   name: string;
 }
 
+// Executive layer types
+export interface PortfolioVerdict {
+  direction: string;
+  magnitude: string;
+  statement: string;
+  confidence: number;
+}
+
+export interface NarrativeBullet {
+  priority: number; // 1 = requires discussion, 2 = monitor, 3 = FYI
+  text: string;
+  supportingTenantIds: string[];
+}
+
+export interface ConcentrationInsight {
+  text: string;
+  affectedPropertyIds: string[];
+  affectedTenantIds: string[];
+}
+
 // API Response types
 export interface BriefResponse {
   id: string;
@@ -96,6 +120,11 @@ export interface BriefResponse {
   statusChanges: StatusChanges;
   recentEvents: Event[];
   coverage: CoverageStatement;
+  // Executive layer (present for exec role only)
+  portfolioVerdict?: PortfolioVerdict;
+  narrativeBullets?: NarrativeBullet[];
+  concentrationInsights?: ConcentrationInsight[];
+  execQuestions?: string[];
 }
 
 export interface StatusCounts {

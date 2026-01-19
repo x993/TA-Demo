@@ -1,0 +1,302 @@
+[
+  {
+    "id": "b0000001-0000-0000-0000-000000000001",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Apex Retail Group",
+    "ticker": "APEX",
+    "cik": "0001234567",
+    "industry": "Retail",
+    "entity_type": "public",
+    "website": "apexretail.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000002",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Northstar Apparel Inc",
+    "ticker": "NSTR",
+    "cik": "0001234568",
+    "industry": "Retail",
+    "entity_type": "public",
+    "website": "northstarapparel.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000003",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Meridian Healthcare Systems",
+    "ticker": "MHCS",
+    "cik": "0001234569",
+    "industry": "Healthcare",
+    "entity_type": "public",
+    "website": "meridianhealthcare.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000004",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "TechFlow Solutions",
+    "ticker": "TFLO",
+    "cik": "0001234570",
+    "industry": "Technology",
+    "entity_type": "public",
+    "website": "techflow.io"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000005",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Continental Logistics Corp",
+    "ticker": "CLOG",
+    "cik": "0001234571",
+    "industry": "Logistics",
+    "entity_type": "public",
+    "website": "continentallogistics.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000006",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Vertex Financial Services",
+    "ticker": "VRTX",
+    "cik": "0001234572",
+    "industry": "Financial",
+    "entity_type": "public",
+    "website": "vertexfinancial.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000007",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "BlueSky Manufacturing",
+    "ticker": "BSKY",
+    "cik": "0001234573",
+    "industry": "Manufacturing",
+    "entity_type": "public",
+    "website": "blueskymfg.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000008",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Granite Construction Holdings",
+    "ticker": "GRNT",
+    "cik": "0001234574",
+    "industry": "Construction",
+    "entity_type": "public",
+    "website": "graniteconstruction.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000009",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Pacific Energy Partners",
+    "ticker": "PCEP",
+    "cik": "0001234575",
+    "industry": "Energy",
+    "entity_type": "public",
+    "website": "pacificenergy.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000010",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Midwest Banking Corp",
+    "ticker": "MWBC",
+    "cik": "0001234576",
+    "industry": "Financial",
+    "entity_type": "public",
+    "website": "midwestbanking.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000011",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "National Insurance Group",
+    "ticker": "NAIG",
+    "cik": "0001234577",
+    "industry": "Insurance",
+    "entity_type": "public",
+    "website": "nationalinsurance.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000012",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Premier Foods Inc",
+    "ticker": "PFDI",
+    "cik": "0001234578",
+    "industry": "Consumer",
+    "entity_type": "public",
+    "website": "premierfoods.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000013",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Atlantic Shipping Co",
+    "ticker": "ATSC",
+    "cik": "0001234579",
+    "industry": "Logistics",
+    "entity_type": "public",
+    "website": "atlanticshipping.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000014",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Redwood Pharmaceuticals",
+    "ticker": "RWPH",
+    "cik": "0001234580",
+    "industry": "Healthcare",
+    "entity_type": "public",
+    "website": "redwoodpharma.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000015",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Sterling Media Group",
+    "ticker": "STMG",
+    "cik": "0001234581",
+    "industry": "Media",
+    "entity_type": "public",
+    "website": "sterlingmedia.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000016",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Morrison & Associates Law",
+    "ticker": null,
+    "cik": null,
+    "industry": "Legal",
+    "entity_type": "private",
+    "website": "morrisonlaw.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000017",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Evergreen Consulting Group",
+    "ticker": null,
+    "cik": null,
+    "industry": "Consulting",
+    "entity_type": "private",
+    "website": "evergreencg.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000018",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Brightside Dental Partners",
+    "ticker": null,
+    "cik": null,
+    "industry": "Healthcare",
+    "entity_type": "private",
+    "website": "brightsidedental.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000019",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Urban Fitness Collective",
+    "ticker": null,
+    "cik": null,
+    "industry": "Fitness",
+    "entity_type": "private",
+    "website": "urbanfitness.co"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000020",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Cascade Coffee Roasters",
+    "ticker": null,
+    "cik": null,
+    "industry": "F&B",
+    "entity_type": "private",
+    "website": "cascadecoffee.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000021",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Pinnacle Engineering LLC",
+    "ticker": null,
+    "cik": null,
+    "industry": "Engineering",
+    "entity_type": "private",
+    "website": "pinnacleeng.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000022",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Harmony Wellness Spa",
+    "ticker": null,
+    "cik": null,
+    "industry": "Wellness",
+    "entity_type": "private",
+    "website": "harmonywellness.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000023",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Keystone Accounting Services",
+    "ticker": null,
+    "cik": null,
+    "industry": "Accounting",
+    "entity_type": "private",
+    "website": "keystoneacct.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000024",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Silverline Interiors",
+    "ticker": null,
+    "cik": null,
+    "industry": "Design",
+    "entity_type": "private",
+    "website": "silverlineint.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000025",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Quantum Data Systems",
+    "ticker": null,
+    "cik": null,
+    "industry": "Technology",
+    "entity_type": "private",
+    "website": "quantumdata.io"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000026",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Ridgeline Property Management",
+    "ticker": null,
+    "cik": null,
+    "industry": "Real Estate",
+    "entity_type": "private",
+    "website": "ridgelinepm.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000027",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Coastal Marketing Agency",
+    "ticker": null,
+    "cik": null,
+    "industry": "Marketing",
+    "entity_type": "private",
+    "website": "coastalmktg.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000028",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Summit HR Solutions",
+    "ticker": null,
+    "cik": null,
+    "industry": "HR Services",
+    "entity_type": "private",
+    "website": "summithr.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000029",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Trailhead Outdoor Gear",
+    "ticker": null,
+    "cik": null,
+    "industry": "Retail",
+    "entity_type": "private",
+    "website": "trailheadgear.com"
+  },
+  {
+    "id": "b0000001-0000-0000-0000-000000000030",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Nova Tech Repairs",
+    "ticker": null,
+    "cik": null,
+    "industry": "Services",
+    "entity_type": "private",
+    "website": "novatechrepairs.com"
+  }
+]

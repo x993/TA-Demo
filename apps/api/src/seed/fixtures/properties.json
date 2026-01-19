@@ -1,0 +1,82 @@
+[
+  {
+    "id": "a0000001-0000-0000-0000-000000000001",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Riverside Tower",
+    "city": "Chicago",
+    "state": "IL",
+    "asset_class": "Office"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000002",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Park Plaza Shopping Center",
+    "city": "Dallas",
+    "state": "TX",
+    "asset_class": "Retail"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000003",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Lakewood Business Park",
+    "city": "Atlanta",
+    "state": "GA",
+    "asset_class": "Office"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000004",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Gateway Industrial Complex",
+    "city": "Phoenix",
+    "state": "AZ",
+    "asset_class": "Industrial"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000005",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Metropolitan Center",
+    "city": "Boston",
+    "state": "MA",
+    "asset_class": "Office"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000006",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Southfield Retail Center",
+    "city": "Detroit",
+    "state": "MI",
+    "asset_class": "Retail"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000007",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Harbor Point Office Tower",
+    "city": "Seattle",
+    "state": "WA",
+    "asset_class": "Office"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000008",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Crossroads Distribution Hub",
+    "city": "Denver",
+    "state": "CO",
+    "asset_class": "Industrial"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000009",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Willowbrook Plaza",
+    "city": "Austin",
+    "state": "TX",
+    "asset_class": "Retail"
+  },
+  {
+    "id": "a0000001-0000-0000-0000-000000000010",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Summit Technology Park",
+    "city": "San Jose",
+    "state": "CA",
+    "asset_class": "Office"
+  }
+]

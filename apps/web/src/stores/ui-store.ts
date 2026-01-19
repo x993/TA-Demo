@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import type { DemoRole } from "@/types";
+import { setDemoRole } from "@/lib/api";
 
 interface UIState {
   // Demo mode
@@ -22,7 +23,10 @@ interface UIState {
 export const useUIStore = create<UIState>((set) => ({
   // Demo mode
   role: "exec",
-  setRole: (role) => set({ role }),
+  setRole: (role) => {
+    setDemoRole(role); // Sync with API client
+    set({ role });
+  },
 
   // Evidence drawer
   evidenceDrawerOpen: false,

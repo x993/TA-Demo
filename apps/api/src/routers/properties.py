@@ -1,17 +1,26 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Depends, HTTPException
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import get_db
 from src.demo_auth import get_demo_user, DemoUser
 from src.models import Property, Lease, Tenant, TenantScoreSnapshot, Event
+from src.responses import CamelRouter
+from src.schemas.property import (
+    PropertyResponse,
+    PropertyDetailResponse,
+    PropertyBasicResponse,
+    PropertyTenantResponse,
+    PropertyTenantEventResponse,
+    PropertyEventResponse,
+)
 
-router = APIRouter(tags=["properties"])
+router = CamelRouter(tags=["properties"])
 
 
-@router.get("/properties")
+@router.get("/properties", response_model=list[PropertyResponse])
 async def list_properties(
     db: AsyncSession = Depends(get_db),
     user: DemoUser = Depends(get_demo_user),
@@ -41,20 +50,20 @@ async def list_properties(
         events_count_result = await db.execute(events_count_query)
         events_count = events_count_result.scalar() or 0
 
-        responses.append({
-            "id": str(prop.id),
-            "name": prop.name,
-            "city": prop.city,
-            "state": prop.state,
-            "asset_class": prop.asset_class,
-            "tenant_count": tenant_count,
-            "events_count": events_count,
-        })
+        responses.append(PropertyResponse(
+            id=str(prop.id),
+            name=prop.name,
+            city=prop.city,
+            state=prop.state,
+            asset_class=prop.asset_class,
+            tenant_count=tenant_count,
+            events_count=events_count,
+        ))
 
     return responses
 
 
-@router.get("/properties/{property_id}")
+@router.get("/properties/{property_id}", response_model=PropertyDetailResponse)
 async def get_property(
     property_id: UUID,
     db: AsyncSession = Depends(get_db),
@@ -103,18 +112,18 @@ async def get_property(
         event_result = await db.execute(event_query)
         latest_event = event_result.scalar_one_or_none()
 
-        tenants.append({
-            "id": str(tenant.id),
-            "name": tenant.name,
-            "status": snapshot.status if snapshot else "stable",
-            "suite_label": lease.suite_label,
-            "rent_share_estimate": lease.rent_share_estimate,
-            "latest_event": {
-                "id": str(latest_event.id),
-                "headline": latest_event.headline,
-                "date": latest_event.event_date.isoformat(),
-            } if latest_event else None,
-        })
+        tenants.append(PropertyTenantResponse(
+            id=str(tenant.id),
+            name=tenant.name,
+            status=snapshot.status if snapshot else "stable",
+            suite_label=lease.suite_label,
+            rent_share_estimate=lease.rent_share_estimate,
+            latest_event=PropertyTenantEventResponse(
+                id=str(latest_event.id),
+                headline=latest_event.headline,
+                date=latest_event.event_date.isoformat(),
+            ) if latest_event else None,
+        ))
 
     # Get recent events at this property
     events_query = (
@@ -127,23 +136,23 @@ async def get_property(
     events_result = await db.execute(events_query)
     recent_events = events_result.scalars().all()
 
-    return {
-        "property": {
-            "id": str(prop.id),
-            "name": prop.name,
-            "city": prop.city,
-            "state": prop.state,
-            "asset_class": prop.asset_class,
-        },
-        "tenants": tenants,
-        "recent_events": [
-            {
-                "id": str(e.id),
-                "tenant_id": str(e.tenant_id),
-                "event_type": e.event_type,
-                "headline": e.headline,
-                "date": e.event_date.isoformat(),
-            }
+    return PropertyDetailResponse(
+        property=PropertyBasicResponse(
+            id=str(prop.id),
+            name=prop.name,
+            city=prop.city,
+            state=prop.state,
+            asset_class=prop.asset_class,
+        ),
+        tenants=tenants,
+        recent_events=[
+            PropertyEventResponse(
+                id=str(e.id),
+                tenant_id=str(e.tenant_id),
+                event_type=e.event_type,
+                headline=e.headline,
+                date=e.event_date.isoformat(),
+            )
             for e in recent_events
         ],
-    }
+    )

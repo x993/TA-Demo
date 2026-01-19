@@ -1,14 +1,14 @@
-from pydantic import BaseModel
+from src.schemas.base import CamelModel
 
 
-class EventSummary(BaseModel):
+class EventSummary(CamelModel):
     id: str
     event_type: str
     headline: str
     date: str
 
 
-class TenantResponse(BaseModel):
+class TenantResponse(CamelModel):
     id: str
     name: str
     ticker: str | None
@@ -20,7 +20,7 @@ class TenantResponse(BaseModel):
     latest_event: EventSummary | None
 
 
-class PropertySummary(BaseModel):
+class PropertySummary(CamelModel):
     id: str
     name: str
     city: str
@@ -28,23 +28,23 @@ class PropertySummary(BaseModel):
     asset_class: str
 
 
-class MemoDetail(BaseModel):
+class MemoDetail(CamelModel):
     fact: str
     citation: str
 
 
-class EventMemo(BaseModel):
+class EventMemo(CamelModel):
     what_was_disclosed: str | None
     key_details: list[MemoDetail]
     context: list[str]
 
 
-class PropertyBadge(BaseModel):
+class PropertyBadge(CamelModel):
     id: str
     name: str
 
 
-class EventDetailResponse(BaseModel):
+class EventDetailResponse(CamelModel):
     id: str
     tenant_id: str
     tenant_name: str
@@ -57,7 +57,7 @@ class EventDetailResponse(BaseModel):
     properties: list[PropertyBadge]
 
 
-class TenantDetailResponse(BaseModel):
+class TenantDetailResponse(CamelModel):
     tenant: TenantResponse
     properties: list[PropertySummary]
     events: list[EventDetailResponse]

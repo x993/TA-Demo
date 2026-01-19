@@ -1,15 +1,21 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import Depends, Query
 from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import get_db
 from src.demo_auth import get_demo_user, DemoUser
 from src.models import Tenant, Property, TenantScoreSnapshot
+from src.responses import CamelRouter
+from src.schemas.search import (
+    SearchResponse,
+    SearchTenantResponse,
+    SearchPropertyResponse,
+)
 
-router = APIRouter(tags=["search"])
+router = CamelRouter(tags=["search"])
 
 
-@router.get("/search")
+@router.get("/search", response_model=SearchResponse)
 async def search(
     q: str = Query(..., min_length=2, description="Search query"),
     db: AsyncSession = Depends(get_db),
@@ -60,24 +66,24 @@ async def search(
     properties_result = await db.execute(properties_query)
     property_matches = properties_result.scalars().all()
 
-    return {
-        "tenants": [
-            {
-                "id": str(tenant.id),
-                "name": tenant.name,
-                "ticker": tenant.ticker,
-                "entity_type": tenant.entity_type,
-                "status": snapshot.status if snapshot else "stable",
-            }
+    return SearchResponse(
+        tenants=[
+            SearchTenantResponse(
+                id=str(tenant.id),
+                name=tenant.name,
+                ticker=tenant.ticker,
+                entity_type=tenant.entity_type,
+                status=snapshot.status if snapshot else "stable",
+            )
             for tenant, snapshot in tenant_matches
         ],
-        "properties": [
-            {
-                "id": str(prop.id),
-                "name": prop.name,
-                "city": prop.city,
-                "state": prop.state,
-            }
+        properties=[
+            SearchPropertyResponse(
+                id=str(prop.id),
+                name=prop.name,
+                city=prop.city,
+                state=prop.state,
+            )
             for prop in property_matches
         ],
-    }
+    )

@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -8,9 +8,11 @@ from sqlalchemy.orm import selectinload
 from src.database import get_db
 from src.demo_auth import get_demo_user, DemoUser
 from src.models import Tenant, TenantScoreSnapshot, Event, Lease, Property
+from src.responses import CamelRouter
 from src.schemas.tenant import TenantResponse, TenantDetailResponse
+from src.validators.memo_validator import is_event_valid_for_display
 
-router = APIRouter(tags=["tenants"])
+router = CamelRouter(tags=["tenants"])
 
 
 @router.get("/tenants", response_model=list[TenantResponse])
@@ -131,6 +133,9 @@ async def get_tenant(
     events_result = await db.execute(events_query)
     events = events_result.scalars().all()
 
+    # Get latest event for this tenant
+    latest_event = events[0] if events else None
+
     return TenantDetailResponse(
         tenant={
             "id": str(tenant.id),
@@ -141,6 +146,12 @@ async def get_tenant(
             "entity_type": tenant.entity_type,
             "status": current_status.status if current_status else "stable",
             "property_count": len(properties),
+            "latest_event": {
+                "id": str(latest_event.id),
+                "event_type": latest_event.event_type,
+                "headline": latest_event.headline,
+                "date": latest_event.event_date.isoformat(),
+            } if latest_event else None,
         },
         properties=[
             {
@@ -170,5 +181,6 @@ async def get_tenant(
                 "properties": [{"id": str(p.id), "name": p.name} for p in properties],
             }
             for e in events
+            if is_event_valid_for_display(e)  # Filter invalid events
         ],
     )

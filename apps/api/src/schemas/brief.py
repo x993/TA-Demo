@@ -1,14 +1,14 @@
-from pydantic import BaseModel
+from src.schemas.base import CamelModel
 
 
-class StatusCountsResponse(BaseModel):
+class StatusCountsResponse(CamelModel):
     critical: int
     watch: int
     stable: int
     improving: int
 
 
-class StatusChangeItem(BaseModel):
+class StatusChangeItem(CamelModel):
     tenant_id: str
     tenant_name: str
     previous_status: str
@@ -17,18 +17,18 @@ class StatusChangeItem(BaseModel):
     event_headline: str | None
 
 
-class StatusChangesResponse(BaseModel):
+class StatusChangesResponse(CamelModel):
     to_watch_or_critical: list[StatusChangeItem]
     to_improving: list[StatusChangeItem]
     unchanged: int
 
 
-class PropertyBadge(BaseModel):
+class PropertyBadge(CamelModel):
     id: str
     name: str
 
 
-class EventResponse(BaseModel):
+class EventResponse(CamelModel):
     id: str
     tenant_id: str
     tenant_name: str
@@ -40,14 +40,34 @@ class EventResponse(BaseModel):
     properties: list[PropertyBadge]
 
 
-class CoverageResponse(BaseModel):
+class CoverageResponse(CamelModel):
     tenants_monitored: int
     tenants_with_disclosures: int
     sources: list[str]
     as_of_date: str
 
 
-class BriefResponse(BaseModel):
+# Executive layer schemas
+class PortfolioVerdict(CamelModel):
+    direction: str  # "increased" | "decreased" | "stable"
+    magnitude: str  # "modestly" | "significantly" | etc.
+    statement: str  # Full verdict statement
+    confidence: float
+
+
+class NarrativeBullet(CamelModel):
+    priority: int  # 1 = requires discussion, 2 = monitor, 3 = FYI
+    text: str
+    supporting_tenant_ids: list[str]
+
+
+class ConcentrationInsight(CamelModel):
+    text: str
+    affected_property_ids: list[str]
+    affected_tenant_ids: list[str]
+
+
+class BriefResponse(CamelModel):
     id: str
     as_of_date: str
     headline: str
@@ -56,3 +76,8 @@ class BriefResponse(BaseModel):
     status_changes: StatusChangesResponse
     recent_events: list[EventResponse]
     coverage: CoverageResponse
+    # Executive layer (optional - present for exec role)
+    portfolio_verdict: PortfolioVerdict | None = None
+    narrative_bullets: list[NarrativeBullet] | None = None
+    concentration_insights: list[ConcentrationInsight] | None = None
+    exec_questions: list[str] | None = None

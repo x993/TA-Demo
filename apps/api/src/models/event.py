@@ -31,6 +31,10 @@ class Event(Base):
     memo_what_disclosed: Mapped[str | None] = mapped_column(Text)  # Plain text summary
     memo_key_details: Mapped[list | None] = mapped_column(JSONB)  # [{fact: str, citation: str}, ...]
     memo_context: Mapped[list | None] = mapped_column(JSONB)  # [str, ...]
+    # Additional memo sections for actionability
+    memo_why_it_matters: Mapped[str | None] = mapped_column(Text)  # Credit analysis
+    memo_recommended_actions: Mapped[list | None] = mapped_column(JSONB)  # [str, ...]
+    memo_what_to_watch: Mapped[list | None] = mapped_column(JSONB)  # [str, ...]
 
     # Validation
     memo_validated: Mapped[bool] = mapped_column(Boolean, default=False)

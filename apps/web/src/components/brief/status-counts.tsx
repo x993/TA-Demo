@@ -15,7 +15,7 @@ const statusConfig: Record<
     label: string;
     description: string;
     icon: React.ElementType;
-    colorClass: string;
+    iconBgClass: string;
     iconColorClass: string;
   }
 > = {
@@ -23,28 +23,28 @@ const statusConfig: Record<
     label: "Critical",
     description: "severe disclosures",
     icon: AlertTriangle,
-    colorClass: "text-negative",
+    iconBgClass: "bg-negative/20",
     iconColorClass: "text-negative",
   },
   watch: {
     label: "Watch",
     description: "notable disclosures",
     icon: Eye,
-    colorClass: "text-warning",
+    iconBgClass: "bg-warning/20",
     iconColorClass: "text-warning",
   },
   stable: {
     label: "Stable",
     description: "no material events",
     icon: CheckCircle,
-    colorClass: "text-muted-foreground",
+    iconBgClass: "bg-muted",
     iconColorClass: "text-muted-foreground",
   },
   improving: {
     label: "Improving",
     description: "positive disclosures",
     icon: TrendingUp,
-    colorClass: "text-positive",
+    iconBgClass: "bg-positive/20",
     iconColorClass: "text-positive",
   },
 };
@@ -53,8 +53,8 @@ export function StatusCounts({ counts }: StatusCountsProps) {
   const statuses: TenantStatus[] = ["critical", "watch", "stable", "improving"];
 
   return (
-    <div className="grid grid-cols-2 gap-3">
-      {statuses.map((status) => {
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      {statuses.map((status, index) => {
         const config = statusConfig[status];
         const Icon = config.icon;
         const count = counts[status];
@@ -63,13 +63,16 @@ export function StatusCounts({ counts }: StatusCountsProps) {
           <Link
             key={status}
             href={`/tenants?status=${status}`}
-            className="rounded-xl border border-white/5 bg-gradient-to-br from-muted/50 to-muted/20 p-4 hover-lift transition-all hover:border-white/10"
+            className="rounded-xl border border-white/5 bg-gradient-to-br from-muted/50 to-muted/20 p-4 hover-lift transition-all hover:border-white/10 hover:shadow-lg group"
+            style={{ animationDelay: `${index * 50}ms` }}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <Icon className={cn("h-4 w-4", config.iconColorClass)} />
+            <div className="flex items-center gap-2 mb-3">
+              <div className={cn("p-1.5 rounded-lg", config.iconBgClass)}>
+                <Icon className={cn("h-4 w-4", config.iconColorClass)} />
+              </div>
               <span className="text-sm text-muted-foreground">{config.label}</span>
             </div>
-            <div className="text-3xl font-bold tracking-tight tabular-nums">
+            <div className="text-3xl font-bold tracking-tight tabular-nums text-foreground">
               {count}
             </div>
             <p className="text-xs text-muted-foreground mt-1">

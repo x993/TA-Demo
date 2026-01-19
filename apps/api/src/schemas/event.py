@@ -1,23 +1,27 @@
-from pydantic import BaseModel
+from src.schemas.base import CamelModel
 
 
-class MemoDetail(BaseModel):
+class MemoDetail(CamelModel):
     fact: str
     citation: str
 
 
-class EventMemo(BaseModel):
+class EventMemo(CamelModel):
     what_was_disclosed: str | None
     key_details: list[MemoDetail]
     context: list[str]
+    # Action sections
+    why_it_matters: str | None = None
+    recommended_actions: list[str] | None = None
+    what_to_watch: list[str] | None = None
 
 
-class PropertyBadge(BaseModel):
+class PropertyBadge(CamelModel):
     id: str
     name: str
 
 
-class EventDetailResponse(BaseModel):
+class EventDetailResponse(CamelModel):
     id: str
     tenant_id: str
     tenant_name: str
@@ -30,7 +34,7 @@ class EventDetailResponse(BaseModel):
     properties: list[PropertyBadge]
 
 
-class EvidenceResponse(BaseModel):
+class EvidenceResponse(CamelModel):
     id: str
     event_id: str
     source_type: str

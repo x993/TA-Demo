@@ -1,0 +1,68 @@
+[
+  {
+    "id": "f1000001-0000-0000-0000-000000000001",
+    "portfolio_id": "550e8400-e29b-41d4-a716-446655440000",
+    "as_of_date": "2026-01-17",
+    "headline": "6 tenants disclosed material events this week. 2 moved to critical status, 4 improved or show positive momentum.",
+    "headline_validated": true,
+    "critical_count": 3,
+    "watch_count": 6,
+    "stable_count": 17,
+    "improving_count": 4,
+    "portfolio_verdict": {
+      "direction": "increased",
+      "magnitude": "modestly",
+      "statement": "Risk increased modestly this week, driven by two isolated tenant liquidity events. No systemic deterioration detected.",
+      "confidence": 0.85
+    },
+    "narrative_bullets": [
+      {
+        "priority": 1,
+        "text": "Retail exposure deteriorated this week due to two unrelated tenant liquidity events.",
+        "supporting_tenant_ids": ["b0000001-0000-0000-0000-000000000001", "b0000001-0000-0000-0000-000000000002"]
+      },
+      {
+        "priority": 1,
+        "text": "Private tenant Urban Fitness abruptly closed 8 locations—portfolio exposure at 2 properties.",
+        "supporting_tenant_ids": ["b0000001-0000-0000-0000-000000000019"]
+      },
+      {
+        "priority": 2,
+        "text": "Willowbrook Plaza now has 3 tenants on watch list, representing 60% of rent share.",
+        "supporting_tenant_ids": ["b0000001-0000-0000-0000-000000000002", "b0000001-0000-0000-0000-000000000019", "b0000001-0000-0000-0000-000000000022"]
+      },
+      {
+        "priority": 3,
+        "text": "Positive momentum at Gateway Industrial: BlueSky Manufacturing expansion offsets Continental Logistics risk.",
+        "supporting_tenant_ids": ["b0000001-0000-0000-0000-000000000007", "b0000001-0000-0000-0000-000000000005"]
+      },
+      {
+        "priority": 3,
+        "text": "No new bankruptcy filings this week across monitored tenants.",
+        "supporting_tenant_ids": []
+      }
+    ],
+    "concentration_insights": [
+      {
+        "text": "Retail tenants account for 67% of all watch-list exposure.",
+        "affected_property_ids": ["a0000001-0000-0000-0000-000000000001", "a0000001-0000-0000-0000-000000000002", "a0000001-0000-0000-0000-000000000009"],
+        "affected_tenant_ids": ["b0000001-0000-0000-0000-000000000001", "b0000001-0000-0000-0000-000000000002"]
+      },
+      {
+        "text": "Willowbrook Plaza contains 40% of portfolio credit risk signals this week.",
+        "affected_property_ids": ["a0000001-0000-0000-0000-000000000009"],
+        "affected_tenant_ids": ["b0000001-0000-0000-0000-000000000002", "b0000001-0000-0000-0000-000000000019", "b0000001-0000-0000-0000-000000000022"]
+      },
+      {
+        "text": "Three tenants with going concern warnings appear across five properties.",
+        "affected_property_ids": ["a0000001-0000-0000-0000-000000000001", "a0000001-0000-0000-0000-000000000002", "a0000001-0000-0000-0000-000000000009"],
+        "affected_tenant_ids": ["b0000001-0000-0000-0000-000000000001", "b0000001-0000-0000-0000-000000000002", "b0000001-0000-0000-0000-000000000019"]
+      }
+    ],
+    "exec_questions": [
+      "What is our contingency plan if Apex Retail seeks rent relief or files Chapter 11?",
+      "Should we accelerate tenant diversification efforts at Willowbrook Plaza given the concentration of watch-list tenants?",
+      "Do we expect follow-on disclosures from Northstar Apparel regarding specific store closures?"
+    ]
+  }
+]
