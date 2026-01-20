@@ -30,6 +30,12 @@ import { CommandPalette } from '@/components/desktop';
 // Mission Control
 import { MissionControl } from '@/components/mission-control';
 
+// Activity Feed (right sidebar)
+import { ActivityFeed } from '@/components/activity-feed';
+
+// Tenant Search
+import { TenantSearch } from '@/components/tenant-search';
+
 // Hero
 import { HeroSection } from '@/components/hero';
 
@@ -107,10 +113,8 @@ export default function HomePage() {
     segment: undefined,
   })) || [];
 
-  // Get properties with changes (positive or negative status)
-  const propertiesWithChanges = brief.propertiesAttention?.filter(p =>
-    p.issuesCount > 0 || p.status === 'improving'
-  ).slice(0, showAllProperties ? undefined : 4) || [];
+  // Get all properties (sorted by issues count, then by status)
+  const allProperties = brief.propertiesAttention?.slice(0, showAllProperties ? undefined : 4) || [];
 
   const hasMoreProperties = (brief.propertiesAttention?.length || 0) > 4;
 
@@ -136,7 +140,7 @@ export default function HomePage() {
           </aside>
 
           {/* Main content area */}
-          <div className="flex-1 max-w-3xl">
+          <div className="flex-1 max-w-2xl">
             {/* Coverage button for mobile */}
             <div className="flex justify-end mb-4 lg:hidden">
               <Button
@@ -156,43 +160,28 @@ export default function HomePage() {
                 {brief.portfolioVerdict && (
                   <StaggerItem>
                     <section>
-                      <PortfolioVerdictCard verdict={brief.portfolioVerdict} />
+                      <PortfolioVerdictCard
+                        verdict={brief.portfolioVerdict}
+                        statusChanges={brief.statusChanges}
+                      />
                     </section>
                   </StaggerItem>
                 )}
 
-                {/* Divider */}
-                <div className="flex justify-center">
-                  <div className="w-16 h-px bg-border" />
-                </div>
-
-                {/* Section B: Risk Posture with Properties */}
-                <StaggerItem>
-                  <section>
-                    <h3 className="text-base font-semibold text-foreground mb-4">
-                      Risk Posture
-                    </h3>
-                    {/* Status tiles */}
-                    <div className="grid grid-cols-3 gap-3 mb-4">
-                      {postureTiles.map(tile => (
-                        <PostureTile
-                          key={tile.status}
-                          tile={tile}
-                          onClick={() => {
-                            window.location.href = `/tenants?status=${tile.status}`;
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    {/* Properties with changes */}
-                    {propertiesWithChanges.length > 0 && (
-                      <div className="mt-4">
-                        <h3 className="text-xs text-muted-foreground mb-3">
-                          Properties with changes
+                {/* Section B: Properties */}
+                {allProperties.length > 0 && (
+                  <StaggerItem>
+                    <section className="rounded-xl border border-border bg-card overflow-hidden">
+                      {/* Header */}
+                      <div className="px-4 py-3 border-b border-border/50">
+                        <h3 className="text-base font-semibold text-foreground">
+                          Properties
                         </h3>
+                      </div>
+                      {/* Content */}
+                      <div className="p-4">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          {propertiesWithChanges.map(prop => (
+                          {allProperties.map(prop => (
                             <PropertyTile
                               key={prop.id}
                               property={prop}
@@ -203,52 +192,12 @@ export default function HomePage() {
                         {hasMoreProperties && (
                           <button
                             onClick={() => setShowAllProperties(!showAllProperties)}
-                            className="w-full mt-3 py-2 text-xs text-muted-foreground hover:text-foreground flex items-center justify-center gap-1 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors"
+                            className="w-full mt-3 py-2 text-xs text-muted-foreground hover:text-foreground flex items-center justify-center gap-1 transition-colors"
                           >
                             {showAllProperties ? 'Show less' : `View all ${brief.propertiesAttention?.length || 0} properties`}
                             <ChevronRight className={`h-3 w-3 transition-transform ${showAllProperties ? '-rotate-90' : ''}`} />
                           </button>
                         )}
-                      </div>
-                    )}
-                  </section>
-                </StaggerItem>
-
-                {/* Divider */}
-                <div className="flex justify-center">
-                  <div className="w-16 h-px bg-border" />
-                </div>
-
-                {/* Section C: Status Changes */}
-                <StaggerItem>
-                  <StatusChanges changes={brief.statusChanges} />
-                </StaggerItem>
-
-                {/* Divider */}
-                <div className="flex justify-center">
-                  <div className="w-16 h-px bg-border" />
-                </div>
-
-                {/* Section D: Concentration / Clusters */}
-                {clusterTiles.length > 0 && (
-                  <StaggerItem>
-                    <section>
-                      <h3 className="text-base font-semibold text-foreground mb-4">
-                        Risk Concentration
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {clusterTiles.map(tile => (
-                          <ClusterTile
-                            key={tile.id}
-                            tile={tile}
-                            onClick={() => {
-                              const propertyId = tile.affectedPropertyIds[0];
-                              if (propertyId) {
-                                openPanel('cluster', propertyId, tile);
-                              }
-                            }}
-                          />
-                        ))}
                       </div>
                     </section>
                   </StaggerItem>
@@ -259,9 +208,9 @@ export default function HomePage() {
                   <div className="w-16 h-px bg-border" />
                 </div>
 
-                {/* Section E: Recent Events */}
+                {/* Section C: Tenant Lookup */}
                 <StaggerItem>
-                  <RecentEvents events={brief.recentEvents} />
+                  <TenantSearch />
                 </StaggerItem>
               </StaggerContainer>
             )}
@@ -289,13 +238,13 @@ export default function HomePage() {
                   </div>
 
                   {/* Your properties */}
-                  {propertiesWithChanges.length > 0 && (
+                  {allProperties.length > 0 && (
                     <div className="mt-4">
                       <h3 className="text-xs text-muted-foreground mb-3">
-                        Your properties with changes
+                        Your properties
                       </h3>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {propertiesWithChanges.map(prop => (
+                        {allProperties.map(prop => (
                           <PropertyTile
                             key={prop.id}
                             property={prop}
@@ -306,7 +255,7 @@ export default function HomePage() {
                       {hasMoreProperties && (
                         <button
                           onClick={() => setShowAllProperties(!showAllProperties)}
-                          className="w-full mt-3 py-2 text-xs text-muted-foreground hover:text-foreground flex items-center justify-center gap-1 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors"
+                          className="w-full mt-3 py-2 text-xs text-muted-foreground hover:text-foreground flex items-center justify-center gap-1 transition-colors"
                         >
                           {showAllProperties ? 'Show less' : `View all ${brief.propertiesAttention?.length || 0} properties`}
                           <ChevronRight className={`h-3 w-3 transition-transform ${showAllProperties ? '-rotate-90' : ''}`} />
@@ -316,14 +265,31 @@ export default function HomePage() {
                   )}
                 </section>
 
-                {/* Status changes */}
-                <StatusChanges changes={brief.statusChanges} />
-
-                {/* Recent events */}
-                <RecentEvents events={brief.recentEvents} />
+                {/* Tenant Lookup */}
+                <TenantSearch />
               </div>
             )}
           </div>
+
+          {/* Right Sidebar - Activity Feed */}
+          <aside className="hidden xl:block w-72 shrink-0">
+            <div className="sticky top-20">
+              <ActivityFeed
+                concentrationInsights={brief.concentrationInsights}
+                recentEvents={brief.recentEvents}
+              />
+            </div>
+          </aside>
+        </div>
+
+        {/* CTA Section - Outside the flex container so sidebars don't extend past */}
+        <div className="text-center py-12 max-w-2xl mx-auto">
+          <h3 className="text-xl font-semibold text-foreground mb-2">
+            Stay ahead of tenant credit risk
+          </h3>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            Get weekly insights on CRE credit trends, portfolio monitoring best practices, and product updates delivered to your inbox.
+          </p>
         </div>
       </div>
 

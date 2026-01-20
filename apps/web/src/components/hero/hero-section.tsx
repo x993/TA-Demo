@@ -73,7 +73,7 @@ export function HeroSection({ statusCounts, tenantsMonitored }: HeroSectionProps
           </div>
 
           {/* Supporting copy */}
-          <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-8">
+          <p className="text-base text-muted-foreground max-w-lg mx-auto mb-8">
             SEC filings, news, and court records analyzed daily.
             Actionable insights delivered to your dashboard.
           </p>
