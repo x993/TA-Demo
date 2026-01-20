@@ -6,8 +6,6 @@ import { usePathname } from "next/navigation";
 import {
   FileText,
   Building,
-  Bell,
-  Search,
   ChevronDown,
   User,
   Layers,
@@ -16,7 +14,10 @@ import {
   BookOpen,
   Menu,
   X,
-  ExternalLink
+  ExternalLink,
+  LayoutDashboard,
+  Briefcase,
+  Radar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/stores/ui-store";
@@ -31,17 +32,15 @@ import {
 
 const navItems = [
   { href: "/", label: "Dashboard" },
-  { href: "/properties", label: "Properties" },
-  { href: "/tenants", label: "Tenants" },
-  { href: "/alerts", label: "Alerts" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/scans", label: "Scans" },
 ];
 
 // Bottom nav with icons for mobile
 const bottomNavItems = [
-  { href: "/", icon: FileText, label: "Dashboard" },
-  { href: "/properties", icon: Building, label: "Properties" },
-  { href: "/tenants", icon: Search, label: "Tenants" },
-  { href: "/alerts", icon: Bell, label: "Alerts" },
+  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/portfolio", icon: Briefcase, label: "Portfolio" },
+  { href: "/scans", icon: Radar, label: "Scans" },
 ];
 
 function Header() {
@@ -336,8 +335,8 @@ function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Product</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
-              <li><Link href="/properties" className="text-muted-foreground hover:text-foreground transition-colors">Properties</Link></li>
-              <li><Link href="/alerts" className="text-muted-foreground hover:text-foreground transition-colors">Alerts</Link></li>
+              <li><Link href="/portfolio" className="text-muted-foreground hover:text-foreground transition-colors">Portfolio</Link></li>
+              <li><Link href="/scans" className="text-muted-foreground hover:text-foreground transition-colors">Scans</Link></li>
               <li><Link href="/api-access" className="text-muted-foreground hover:text-foreground transition-colors">API Access</Link></li>
             </ul>
           </div>

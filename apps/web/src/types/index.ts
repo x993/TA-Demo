@@ -271,3 +271,83 @@ export interface MonitoringState {
   sourcesActive: number;
   sourcesTotal: number;
 }
+
+// === PORTFOLIO TYPES ===
+
+export interface EntityNote {
+  id: string;
+  entityType: 'property' | 'tenant' | 'alert';
+  entityId: string;
+  content: string;
+  createdAt: string;
+  createdBy: string;
+}
+
+export interface ShareConfig {
+  entityType: 'property' | 'tenant' | 'alert';
+  entityId: string;
+  sharedWith: string[];
+  permissions: 'view' | 'edit';
+  shareLink?: string;
+}
+
+export type EntityFilterStatus = 'critical' | 'watch' | 'stable' | 'improving' | 'all';
+export type EntityType = 'property' | 'tenant' | 'alert';
+
+export interface PortfolioFilters {
+  status: EntityFilterStatus[];
+  types: EntityType[];
+  search: string;
+}
+
+export type QuickAction = 'edit' | 'note' | 'share' | 'archive';
+
+// Unified entity type for portfolio display
+export interface PortfolioEntity {
+  id: string;
+  type: EntityType;
+  name: string;
+  status: TenantStatus;
+  subtitle: string; // e.g., "New York, NY" for property, "AAPL • Technology" for tenant
+  metadata: Record<string, string | number>;
+  lastActivity?: string;
+  notes: EntityNote[];
+}
+
+// === SCANS TYPES ===
+
+export interface DataSource {
+  id: string;
+  name: string;
+  type: 'public' | 'subscription' | 'custom' | 'internal';
+  category: string;
+  enabled: boolean;
+  status: 'connected' | 'error' | 'pending';
+  lastSync?: string;
+  isPremium?: boolean;
+}
+
+export interface Scan {
+  id: string;
+  startTime: string;
+  endTime?: string;
+  status: 'running' | 'done' | 'failed';
+  tenantsScanned: number;
+  alertsGenerated: number;
+  duration?: number;
+  sources: string[];
+}
+
+export interface ScanConfig {
+  frequency: ScanFrequency;
+  focusAreas: string[];
+  customPrompt?: string;
+  notifyOnAlerts: boolean;
+}
+
+export interface DataSourceCategory {
+  id: string;
+  name: string;
+  sources: DataSource[];
+  expanded?: boolean;
+}

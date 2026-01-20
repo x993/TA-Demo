@@ -1,4 +1,16 @@
-import type { BriefResponse, Tenant, Event, TenantDetailResponse, Evidence } from "@/types";
+import type {
+  BriefResponse,
+  Tenant,
+  Event,
+  TenantDetailResponse,
+  Evidence,
+  DataSource,
+  DataSourceCategory,
+  Scan,
+  ScanConfig,
+  EntityNote,
+  PortfolioEntity,
+} from "@/types";
 
 // Mock Brief Response
 export const mockBrief: BriefResponse = {
@@ -308,3 +320,482 @@ export const mockTenants: Tenant[] = [
     },
   },
 ];
+
+// === SCANS PAGE MOCK DATA ===
+
+// Mock Data Sources
+export const mockDataSources: DataSourceCategory[] = [
+  {
+    id: "public",
+    name: "Public Sources",
+    expanded: true,
+    sources: [
+      {
+        id: "sec",
+        name: "SEC Filings",
+        type: "public",
+        category: "public",
+        enabled: true,
+        status: "connected",
+        lastSync: "2026-01-20T14:30:00Z",
+      },
+      {
+        id: "news",
+        name: "News & Press",
+        type: "public",
+        category: "public",
+        enabled: true,
+        status: "connected",
+        lastSync: "2026-01-20T14:25:00Z",
+      },
+      {
+        id: "court",
+        name: "Court Records",
+        type: "public",
+        category: "public",
+        enabled: true,
+        status: "connected",
+        lastSync: "2026-01-20T12:00:00Z",
+      },
+    ],
+  },
+  {
+    id: "subscription",
+    name: "Subscriptions",
+    expanded: true,
+    sources: [
+      {
+        id: "dnb",
+        name: "Dun & Bradstreet",
+        type: "subscription",
+        category: "subscription",
+        enabled: true,
+        status: "connected",
+        lastSync: "2026-01-20T10:00:00Z",
+        isPremium: true,
+      },
+      {
+        id: "experian",
+        name: "Experian Business",
+        type: "subscription",
+        category: "subscription",
+        enabled: false,
+        status: "pending",
+        isPremium: true,
+      },
+      {
+        id: "moodys",
+        name: "Moody's Analytics",
+        type: "subscription",
+        category: "subscription",
+        enabled: true,
+        status: "connected",
+        lastSync: "2026-01-19T18:00:00Z",
+        isPremium: true,
+      },
+    ],
+  },
+  {
+    id: "custom",
+    name: "Custom APIs",
+    expanded: false,
+    sources: [
+      {
+        id: "internal-crm",
+        name: "Internal CRM",
+        type: "custom",
+        category: "custom",
+        enabled: true,
+        status: "connected",
+        lastSync: "2026-01-20T14:00:00Z",
+      },
+    ],
+  },
+  {
+    id: "internal",
+    name: "Internal Data",
+    expanded: false,
+    sources: [
+      {
+        id: "lease-data",
+        name: "Lease Database",
+        type: "internal",
+        category: "internal",
+        enabled: true,
+        status: "connected",
+        lastSync: "2026-01-20T08:00:00Z",
+      },
+    ],
+  },
+];
+
+// Mock Scan History
+export const mockScans: Scan[] = [
+  {
+    id: "scan-001",
+    startTime: "2026-01-20T14:30:00Z",
+    endTime: "2026-01-20T14:32:15Z",
+    status: "done",
+    tenantsScanned: 12,
+    alertsGenerated: 3,
+    duration: 135,
+    sources: ["sec", "news", "court", "dnb"],
+  },
+  {
+    id: "scan-002",
+    startTime: "2026-01-20T13:30:00Z",
+    endTime: "2026-01-20T13:31:45Z",
+    status: "done",
+    tenantsScanned: 12,
+    alertsGenerated: 0,
+    duration: 105,
+    sources: ["sec", "news", "court", "dnb"],
+  },
+  {
+    id: "scan-003",
+    startTime: "2026-01-20T12:30:00Z",
+    endTime: "2026-01-20T12:32:00Z",
+    status: "done",
+    tenantsScanned: 12,
+    alertsGenerated: 1,
+    duration: 120,
+    sources: ["sec", "news", "court", "dnb"],
+  },
+  {
+    id: "scan-004",
+    startTime: "2026-01-20T11:30:00Z",
+    endTime: "2026-01-20T11:31:30Z",
+    status: "done",
+    tenantsScanned: 12,
+    alertsGenerated: 0,
+    duration: 90,
+    sources: ["sec", "news", "court"],
+  },
+  {
+    id: "scan-005",
+    startTime: "2026-01-20T10:30:00Z",
+    endTime: "2026-01-20T10:32:45Z",
+    status: "done",
+    tenantsScanned: 12,
+    alertsGenerated: 2,
+    duration: 165,
+    sources: ["sec", "news", "court", "dnb", "moodys"],
+  },
+  {
+    id: "scan-006",
+    startTime: "2026-01-20T09:30:00Z",
+    status: "failed",
+    tenantsScanned: 8,
+    alertsGenerated: 0,
+    sources: ["sec", "news"],
+  },
+  {
+    id: "scan-007",
+    startTime: "2026-01-20T08:30:00Z",
+    endTime: "2026-01-20T08:31:20Z",
+    status: "done",
+    tenantsScanned: 12,
+    alertsGenerated: 1,
+    duration: 80,
+    sources: ["sec", "news", "court"],
+  },
+];
+
+// Mock Scan Config
+export const mockScanConfig: ScanConfig = {
+  frequency: "hourly",
+  focusAreas: ["revenue", "litigation"],
+  customPrompt: "",
+  notifyOnAlerts: true,
+};
+
+// Focus area options
+export const focusAreaOptions = [
+  { id: "bankruptcy", label: "Bankruptcy & Insolvency" },
+  { id: "revenue", label: "Revenue Decline" },
+  { id: "litigation", label: "Litigation & Legal" },
+  { id: "leadership", label: "Leadership Changes" },
+  { id: "credit", label: "Credit Rating Changes" },
+  { id: "layoffs", label: "Workforce Reductions" },
+];
+
+// === PORTFOLIO PAGE MOCK DATA ===
+
+// Mock Entity Notes
+export const mockNotes: EntityNote[] = [
+  {
+    id: "note-001",
+    entityType: "tenant",
+    entityId: "tenant-apex",
+    content: "Spoke with CFO about Q4 guidance revision. They expect to beat lowered expectations.",
+    createdAt: "2026-01-18T10:30:00Z",
+    createdBy: "John Smith",
+  },
+  {
+    id: "note-002",
+    entityType: "property",
+    entityId: "prop-park",
+    content: "Lease renewal discussion scheduled for Feb 15. Tenant seeking 5% rent reduction.",
+    createdAt: "2026-01-15T14:00:00Z",
+    createdBy: "Jane Doe",
+  },
+  {
+    id: "note-003",
+    entityType: "tenant",
+    entityId: "tenant-meridian",
+    content: "Monitoring potential M&A activity. No immediate risk to lease obligations.",
+    createdAt: "2026-01-19T09:15:00Z",
+    createdBy: "John Smith",
+  },
+];
+
+// Mock Portfolio Entities (unified view)
+export const mockPortfolioEntities: PortfolioEntity[] = [
+  // Properties
+  {
+    id: "prop-park",
+    type: "property",
+    name: "Park Plaza Shopping Center",
+    status: "watch",
+    subtitle: "Dallas, TX",
+    metadata: {
+      assetClass: "Retail",
+      tenantCount: 4,
+      sqft: "125K",
+    },
+    lastActivity: "2026-01-18T10:30:00Z",
+    notes: [],
+  },
+  {
+    id: "prop-south",
+    type: "property",
+    name: "Southfield Retail Center",
+    status: "watch",
+    subtitle: "Houston, TX",
+    metadata: {
+      assetClass: "Retail",
+      tenantCount: 6,
+      sqft: "180K",
+    },
+    lastActivity: "2026-01-19T14:00:00Z",
+    notes: [],
+  },
+  {
+    id: "prop-metro",
+    type: "property",
+    name: "Metropolitan Center",
+    status: "critical",
+    subtitle: "Chicago, IL",
+    metadata: {
+      assetClass: "Office",
+      tenantCount: 12,
+      sqft: "450K",
+    },
+    lastActivity: "2026-01-17T08:00:00Z",
+    notes: [],
+  },
+  {
+    id: "prop-gateway",
+    type: "property",
+    name: "Gateway Medical Campus",
+    status: "stable",
+    subtitle: "Phoenix, AZ",
+    metadata: {
+      assetClass: "Medical",
+      tenantCount: 8,
+      sqft: "275K",
+    },
+    lastActivity: "2026-01-16T11:00:00Z",
+    notes: [],
+  },
+  {
+    id: "prop-lakewood",
+    type: "property",
+    name: "Lakewood Industrial Park",
+    status: "improving",
+    subtitle: "Denver, CO",
+    metadata: {
+      assetClass: "Industrial",
+      tenantCount: 3,
+      sqft: "520K",
+    },
+    lastActivity: "2026-01-15T09:30:00Z",
+    notes: [],
+  },
+  // Tenants
+  {
+    id: "tenant-apex",
+    type: "tenant",
+    name: "Apex Retail Group",
+    status: "critical",
+    subtitle: "APEX \u2022 Retail",
+    metadata: {
+      propertyCount: 2,
+      annualRent: "$2.4M",
+      leaseEnd: "Dec 2027",
+    },
+    lastActivity: "2026-01-20T09:00:00Z",
+    notes: [],
+  },
+  {
+    id: "tenant-northstar",
+    type: "tenant",
+    name: "Northstar Apparel",
+    status: "critical",
+    subtitle: "NSTR \u2022 Retail",
+    metadata: {
+      propertyCount: 1,
+      annualRent: "$890K",
+      leaseEnd: "Mar 2026",
+    },
+    lastActivity: "2026-01-19T16:30:00Z",
+    notes: [],
+  },
+  {
+    id: "tenant-meridian",
+    type: "tenant",
+    name: "Meridian Healthcare",
+    status: "watch",
+    subtitle: "MHCS \u2022 Healthcare",
+    metadata: {
+      propertyCount: 2,
+      annualRent: "$3.1M",
+      leaseEnd: "Jun 2028",
+    },
+    lastActivity: "2026-01-18T13:45:00Z",
+    notes: [],
+  },
+  {
+    id: "tenant-bluesky",
+    type: "tenant",
+    name: "BlueSky Manufacturing",
+    status: "improving",
+    subtitle: "BSKY \u2022 Manufacturing",
+    metadata: {
+      propertyCount: 1,
+      annualRent: "$1.8M",
+      leaseEnd: "Sep 2029",
+    },
+    lastActivity: "2026-01-17T10:00:00Z",
+    notes: [],
+  },
+  {
+    id: "tenant-urban",
+    type: "tenant",
+    name: "Urban Fitness Centers",
+    status: "critical",
+    subtitle: "Private \u2022 Fitness",
+    metadata: {
+      propertyCount: 3,
+      annualRent: "$1.2M",
+      leaseEnd: "Aug 2026",
+    },
+    lastActivity: "2026-01-16T14:20:00Z",
+    notes: [],
+  },
+  // Alerts (events)
+  {
+    id: "event-001",
+    type: "alert",
+    name: "Going Concern - Apex Retail",
+    status: "critical",
+    subtitle: "SEC Filing \u2022 Jan 15, 2026",
+    metadata: {
+      eventType: "sec_filing",
+      affectedProperties: 2,
+      severity: "High",
+    },
+    lastActivity: "2026-01-15T09:00:00Z",
+    notes: [],
+  },
+  {
+    id: "event-002",
+    type: "alert",
+    name: "Chapter 11 Filing - Northstar",
+    status: "critical",
+    subtitle: "Court Filing \u2022 Jan 14, 2026",
+    metadata: {
+      eventType: "court_filing",
+      affectedProperties: 1,
+      severity: "High",
+    },
+    lastActivity: "2026-01-14T14:00:00Z",
+    notes: [],
+  },
+  {
+    id: "event-003",
+    type: "alert",
+    name: "Restructuring Advisor - Meridian",
+    status: "watch",
+    subtitle: "SEC Filing \u2022 Jan 13, 2026",
+    metadata: {
+      eventType: "sec_filing",
+      affectedProperties: 2,
+      severity: "Medium",
+    },
+    lastActivity: "2026-01-13T10:00:00Z",
+    notes: [],
+  },
+  {
+    id: "event-005",
+    type: "alert",
+    name: "Debt Refinancing - BlueSky",
+    status: "improving",
+    subtitle: "Press Release \u2022 Jan 12, 2026",
+    metadata: {
+      eventType: "press_release",
+      affectedProperties: 1,
+      severity: "Positive",
+    },
+    lastActivity: "2026-01-12T08:00:00Z",
+    notes: [],
+  },
+];
+
+// === HELPER FUNCTIONS ===
+
+// Helper function to format relative time
+export function formatRelativeTime(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays}d ago`;
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+// Helper function to format scan duration
+export function formatDuration(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`;
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}m ${secs}s`;
+}
+
+// Helper function to format time
+export function formatTime(dateStr: string): string {
+  return new Date(dateStr).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+// Helper function to format date
+export function formatDateShort(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
