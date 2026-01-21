@@ -44,34 +44,49 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-20 bg-muted/20">
+    <section className="py-24 bg-muted/20">
       <div className="container px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Everything you need to monitor tenant risk
-          </h2>
+        {/* Section Header with accent line */}
+        <div className="text-center mb-16">
+          <div className="inline-block">
+            <div className="h-1 w-12 bg-gradient-to-r from-primary to-primary/50 rounded-full mx-auto mb-6" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+              Everything you need to monitor tenant risk
+            </h2>
+          </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Purpose-built for commercial real estate professionals who need to stay ahead of tenant credit risk.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div key={index} className="relative">
-                {/* Icon */}
-                <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4">
-                  <Icon className="h-5 w-5" />
-                </div>
+              <div
+                key={index}
+                className="group relative rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 overflow-hidden"
+              >
+                {/* Gradient highlight overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Content */}
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
+                <div className="relative">
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary flex items-center justify-center mb-4 group-hover:from-primary/30 group-hover:to-primary/10 transition-colors duration-300">
+                    <Icon className="h-6 w-6" />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                    {feature.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
             );
           })}

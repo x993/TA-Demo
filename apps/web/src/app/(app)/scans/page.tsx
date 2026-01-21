@@ -1,16 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { Play, Loader2 } from "lucide-react";
+import { Play, Loader2, Activity, Settings2, History } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   DataSourcesPanel,
-  ScanHistory,
   ScanConfigPanel,
   AddSourceModal,
   PromptEditorModal,
-  ScanTabs,
   ScanProgressTab,
   ConfigureScanTab,
+  ScanResultsPanel,
+  ScanInsightsPanel,
+  ScanHistoryContent,
+  ScanSourcesStatus,
+  ScanLiveMetrics,
 } from "@/components/scans";
 import {
   mockDataSources,
@@ -21,12 +25,18 @@ import type { DataSourceCategory, ScanConfig } from "@/types";
 
 type ScanTab = "progress" | "configure" | "history";
 
+const tabs = [
+  { id: "progress" as const, label: "Progress", icon: Activity },
+  { id: "configure" as const, label: "Configure", icon: Settings2 },
+  { id: "history" as const, label: "History", icon: History },
+];
+
 export default function ScansPage() {
   // State
   const [dataSources, setDataSources] = useState<DataSourceCategory[]>(mockDataSources);
   const [config, setConfig] = useState<ScanConfig>(mockScanConfig);
   const [isScanning, setIsScanning] = useState(false);
-  const [activeTab, setActiveTab] = useState<ScanTab>("history");
+  const [activeTab, setActiveTab] = useState<ScanTab>("progress");
 
   // Modal states
   const [addSourceModalOpen, setAddSourceModalOpen] = useState(false);
@@ -60,17 +70,15 @@ export default function ScansPage() {
     // Simulate scan
     setTimeout(() => {
       setIsScanning(false);
-    }, 15000);
+    }, 33000);
   };
 
   const handleViewScanDetails = (scanId: string) => {
     console.log("View scan details:", scanId);
-    // In a real app, this would navigate to scan details or open a modal
   };
 
   const handleLoadMoreScans = () => {
     console.log("Load more scans");
-    // In a real app, this would fetch more scans
   };
 
   const handleSavePrompt = (prompt: string) => {
@@ -79,7 +87,6 @@ export default function ScansPage() {
 
   const handleManageKeys = () => {
     console.log("Manage API keys");
-    // In a real app, this would open an API key management modal
   };
 
   const handleStartScan = (scanConfig: {
@@ -93,6 +100,34 @@ export default function ScansPage() {
     console.log("Starting scan with config:", scanConfig);
     handleRunScan();
   };
+
+  // Render tabs navigation
+  const renderTabs = () => (
+    <div className="px-4 py-3 border-b border-border/50">
+      <nav className="flex gap-4" aria-label="Tabs">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
+                isActive
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {tab.label}
+            </button>
+          );
+        })}
+      </nav>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)]">
@@ -129,50 +164,80 @@ export default function ScansPage() {
         </div>
       </header>
 
-      {/* Tabs */}
-      <ScanTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* Tab Content */}
+      {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden">
+        {/* Progress Tab - With sidebars */}
         {activeTab === "progress" && (
-          <ScanProgressTab
-            isScanning={isScanning}
-            onCancelScan={() => setIsScanning(false)}
-          />
-        )}
-
-        {activeTab === "configure" && (
-          <ConfigureScanTab
-            onStartScan={handleStartScan}
-          />
-        )}
-
-        {activeTab === "history" && (
           <>
-            {/* Left Panel - Data Sources */}
+            {/* Left Sidebar - Data Sources Status */}
+            <ScanSourcesStatus isScanning={true} />
+
+            {/* Center Content with Tabs */}
+            <main className="flex-1 flex flex-col overflow-hidden bg-background">
+              {renderTabs()}
+              <div className="flex-1 overflow-hidden">
+                <ScanProgressTab
+                  isScanning={isScanning}
+                  onCancelScan={() => setIsScanning(false)}
+                  onViewResults={() => setActiveTab("history")}
+                />
+              </div>
+            </main>
+
+            {/* Right Sidebar - Live Metrics */}
+            <ScanLiveMetrics isScanning={true} />
+          </>
+        )}
+
+        {/* Configure Tab - With sidebars */}
+        {activeTab === "configure" && (
+          <>
+            {/* Left Sidebar - Data Sources */}
             <DataSourcesPanel
               categories={dataSources}
               onToggleSource={handleToggleSource}
               onAddSource={handleAddSource}
             />
 
-            {/* Center - Scan History */}
+            {/* Center Content with Tabs */}
             <main className="flex-1 flex flex-col overflow-hidden bg-background">
-              <ScanHistory
-                scans={mockScans}
-                onViewDetails={handleViewScanDetails}
-                onLoadMore={handleLoadMoreScans}
-                hasMore={true}
-              />
+              {renderTabs()}
+              <div className="flex-1 overflow-hidden">
+                <ConfigureScanTab onStartScan={handleStartScan} />
+              </div>
             </main>
 
-            {/* Right Panel - Configuration */}
+            {/* Right Sidebar - Config Panel */}
             <ScanConfigPanel
               config={config}
               onConfigChange={handleConfigChange}
               onEditPrompts={() => setPromptEditorOpen(true)}
               onManageKeys={handleManageKeys}
             />
+          </>
+        )}
+
+        {/* History Tab - With sidebars */}
+        {activeTab === "history" && (
+          <>
+            {/* Left Sidebar - Scan Results */}
+            <ScanResultsPanel />
+
+            {/* Center Content with Tabs */}
+            <main className="flex-1 flex flex-col overflow-hidden bg-background">
+              {renderTabs()}
+              <div className="flex-1 overflow-hidden">
+                <ScanHistoryContent
+                  scans={mockScans}
+                  onViewDetails={handleViewScanDetails}
+                  onLoadMore={handleLoadMoreScans}
+                  hasMore={true}
+                />
+              </div>
+            </main>
+
+            {/* Right Sidebar - Insights */}
+            <ScanInsightsPanel />
           </>
         )}
       </div>
