@@ -84,6 +84,7 @@ async def list_tenants(
                 "headline": latest_event.headline,
                 "date": latest_event.event_date.isoformat(),
             } if latest_event else None,
+            logo_url=tenant.logo_url,
         ))
 
     return responses
@@ -152,6 +153,7 @@ async def get_tenant(
                 "headline": latest_event.headline,
                 "date": latest_event.event_date.isoformat(),
             } if latest_event else None,
+            "logo_url": tenant.logo_url,
         },
         properties=[
             {

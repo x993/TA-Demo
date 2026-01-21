@@ -7,7 +7,8 @@
     "cik": "0001234567",
     "industry": "Retail",
     "entity_type": "public",
-    "website": "apexretail.com"
+    "website": "apexretail.com",
+    "logo_url": "https://ui-avatars.com/api/?name=AR&background=dc2626&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000002",
@@ -17,7 +18,8 @@
     "cik": "0001234568",
     "industry": "Retail",
     "entity_type": "public",
-    "website": "northstarapparel.com"
+    "website": "northstarapparel.com",
+    "logo_url": "https://ui-avatars.com/api/?name=NA&background=1d4ed8&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000003",
@@ -27,7 +29,8 @@
     "cik": "0001234569",
     "industry": "Healthcare",
     "entity_type": "public",
-    "website": "meridianhealthcare.com"
+    "website": "meridianhealthcare.com",
+    "logo_url": "https://ui-avatars.com/api/?name=MH&background=059669&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000004",
@@ -37,7 +40,8 @@
     "cik": "0001234570",
     "industry": "Technology",
     "entity_type": "public",
-    "website": "techflow.io"
+    "website": "techflow.io",
+    "logo_url": "https://ui-avatars.com/api/?name=TF&background=7c3aed&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000005",
@@ -47,7 +51,8 @@
     "cik": "0001234571",
     "industry": "Logistics",
     "entity_type": "public",
-    "website": "continentallogistics.com"
+    "website": "continentallogistics.com",
+    "logo_url": "https://ui-avatars.com/api/?name=CL&background=ea580c&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000006",
@@ -57,7 +62,8 @@
     "cik": "0001234572",
     "industry": "Financial",
     "entity_type": "public",
-    "website": "vertexfinancial.com"
+    "website": "vertexfinancial.com",
+    "logo_url": "https://ui-avatars.com/api/?name=VF&background=0891b2&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000007",
@@ -67,7 +73,8 @@
     "cik": "0001234573",
     "industry": "Manufacturing",
     "entity_type": "public",
-    "website": "blueskymfg.com"
+    "website": "blueskymfg.com",
+    "logo_url": "https://ui-avatars.com/api/?name=BM&background=2563eb&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000008",
@@ -77,7 +84,8 @@
     "cik": "0001234574",
     "industry": "Construction",
     "entity_type": "public",
-    "website": "graniteconstruction.com"
+    "website": "graniteconstruction.com",
+    "logo_url": "https://ui-avatars.com/api/?name=GC&background=57534e&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000009",
@@ -87,7 +95,8 @@
     "cik": "0001234575",
     "industry": "Energy",
     "entity_type": "public",
-    "website": "pacificenergy.com"
+    "website": "pacificenergy.com",
+    "logo_url": "https://ui-avatars.com/api/?name=PE&background=ca8a04&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000010",
@@ -97,7 +106,8 @@
     "cik": "0001234576",
     "industry": "Financial",
     "entity_type": "public",
-    "website": "midwestbanking.com"
+    "website": "midwestbanking.com",
+    "logo_url": "https://ui-avatars.com/api/?name=MB&background=15803d&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000011",
@@ -107,7 +117,8 @@
     "cik": "0001234577",
     "industry": "Insurance",
     "entity_type": "public",
-    "website": "nationalinsurance.com"
+    "website": "nationalinsurance.com",
+    "logo_url": "https://ui-avatars.com/api/?name=NI&background=4338ca&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000012",
@@ -117,7 +128,8 @@
     "cik": "0001234578",
     "industry": "Consumer",
     "entity_type": "public",
-    "website": "premierfoods.com"
+    "website": "premierfoods.com",
+    "logo_url": "https://ui-avatars.com/api/?name=PF&background=be123c&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000013",
@@ -127,7 +139,8 @@
     "cik": "0001234579",
     "industry": "Logistics",
     "entity_type": "public",
-    "website": "atlanticshipping.com"
+    "website": "atlanticshipping.com",
+    "logo_url": "https://ui-avatars.com/api/?name=AS&background=0369a1&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000014",
@@ -137,7 +150,8 @@
     "cik": "0001234580",
     "industry": "Healthcare",
     "entity_type": "public",
-    "website": "redwoodpharma.com"
+    "website": "redwoodpharma.com",
+    "logo_url": "https://ui-avatars.com/api/?name=RP&background=b91c1c&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000015",
@@ -147,7 +161,8 @@
     "cik": "0001234581",
     "industry": "Media",
     "entity_type": "public",
-    "website": "sterlingmedia.com"
+    "website": "sterlingmedia.com",
+    "logo_url": "https://ui-avatars.com/api/?name=SM&background=6d28d9&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000016",
@@ -157,7 +172,8 @@
     "cik": null,
     "industry": "Legal",
     "entity_type": "private",
-    "website": "morrisonlaw.com"
+    "website": "morrisonlaw.com",
+    "logo_url": "https://ui-avatars.com/api/?name=MA&background=1e3a5f&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000017",
@@ -167,7 +183,8 @@
     "cik": null,
     "industry": "Consulting",
     "entity_type": "private",
-    "website": "evergreencg.com"
+    "website": "evergreencg.com",
+    "logo_url": "https://ui-avatars.com/api/?name=EC&background=166534&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000018",
@@ -177,7 +194,8 @@
     "cik": null,
     "industry": "Healthcare",
     "entity_type": "private",
-    "website": "brightsidedental.com"
+    "website": "brightsidedental.com",
+    "logo_url": "https://ui-avatars.com/api/?name=BD&background=0ea5e9&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000019",
@@ -187,7 +205,8 @@
     "cik": null,
     "industry": "Fitness",
     "entity_type": "private",
-    "website": "urbanfitness.co"
+    "website": "urbanfitness.co",
+    "logo_url": "https://ui-avatars.com/api/?name=UF&background=f97316&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000020",
@@ -197,7 +216,8 @@
     "cik": null,
     "industry": "F&B",
     "entity_type": "private",
-    "website": "cascadecoffee.com"
+    "website": "cascadecoffee.com",
+    "logo_url": "https://ui-avatars.com/api/?name=CC&background=78350f&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000021",
@@ -207,7 +227,8 @@
     "cik": null,
     "industry": "Engineering",
     "entity_type": "private",
-    "website": "pinnacleeng.com"
+    "website": "pinnacleeng.com",
+    "logo_url": "https://ui-avatars.com/api/?name=PE&background=475569&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000022",
@@ -217,7 +238,8 @@
     "cik": null,
     "industry": "Wellness",
     "entity_type": "private",
-    "website": "harmonywellness.com"
+    "website": "harmonywellness.com",
+    "logo_url": "https://ui-avatars.com/api/?name=HW&background=db2777&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000023",
@@ -227,7 +249,8 @@
     "cik": null,
     "industry": "Accounting",
     "entity_type": "private",
-    "website": "keystoneacct.com"
+    "website": "keystoneacct.com",
+    "logo_url": "https://ui-avatars.com/api/?name=KA&background=334155&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000024",
@@ -237,7 +260,8 @@
     "cik": null,
     "industry": "Design",
     "entity_type": "private",
-    "website": "silverlineint.com"
+    "website": "silverlineint.com",
+    "logo_url": "https://ui-avatars.com/api/?name=SI&background=9333ea&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000025",
@@ -247,7 +271,8 @@
     "cik": null,
     "industry": "Technology",
     "entity_type": "private",
-    "website": "quantumdata.io"
+    "website": "quantumdata.io",
+    "logo_url": "https://ui-avatars.com/api/?name=QD&background=4f46e5&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000026",
@@ -257,7 +282,8 @@
     "cik": null,
     "industry": "Real Estate",
     "entity_type": "private",
-    "website": "ridgelinepm.com"
+    "website": "ridgelinepm.com",
+    "logo_url": "https://ui-avatars.com/api/?name=RP&background=065f46&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000027",
@@ -267,7 +293,8 @@
     "cik": null,
     "industry": "Marketing",
     "entity_type": "private",
-    "website": "coastalmktg.com"
+    "website": "coastalmktg.com",
+    "logo_url": "https://ui-avatars.com/api/?name=CM&background=0284c7&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000028",
@@ -277,7 +304,8 @@
     "cik": null,
     "industry": "HR Services",
     "entity_type": "private",
-    "website": "summithr.com"
+    "website": "summithr.com",
+    "logo_url": "https://ui-avatars.com/api/?name=SH&background=c2410c&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000029",
@@ -287,7 +315,8 @@
     "cik": null,
     "industry": "Retail",
     "entity_type": "private",
-    "website": "trailheadgear.com"
+    "website": "trailheadgear.com",
+    "logo_url": "https://ui-avatars.com/api/?name=TO&background=15803d&color=fff&size=128&font-size=0.4&bold=true"
   },
   {
     "id": "b0000001-0000-0000-0000-000000000030",
@@ -297,6 +326,7 @@
     "cik": null,
     "industry": "Services",
     "entity_type": "private",
-    "website": "novatechrepairs.com"
+    "website": "novatechrepairs.com",
+    "logo_url": "https://ui-avatars.com/api/?name=NT&background=6366f1&color=fff&size=128&font-size=0.4&bold=true"
   }
 ]

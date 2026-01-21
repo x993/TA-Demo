@@ -36,9 +36,6 @@ import { ActivityFeed } from '@/components/activity-feed';
 // Tenant Search
 import { TenantSearch } from '@/components/tenant-search';
 
-// Hero
-import { HeroSection } from '@/components/hero';
-
 // UI
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -47,7 +44,7 @@ import { Settings2, ChevronRight } from 'lucide-react';
 
 import type { BriefResponse, PostureTile as PostureTileType } from '@/types';
 
-export default function HomePage() {
+export default function DashboardPage() {
   const { role, openCoverageDrawer, openPanel } = useUIStore();
   const [brief, setBrief] = useState<BriefResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -120,14 +117,8 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero Section */}
-      <HeroSection
-        statusCounts={brief.statusCounts}
-        tenantsMonitored={brief.coverage.tenantsMonitored}
-      />
-
       {/* Main content with sidebar layout */}
-      <div id="portfolio-content" className="container mx-auto px-4 pb-6">
+      <div id="portfolio-content" className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           {/* Left Sidebar - Mission Control */}
           <aside className="hidden lg:block w-64 shrink-0">

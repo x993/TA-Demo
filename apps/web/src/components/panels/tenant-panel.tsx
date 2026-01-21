@@ -61,6 +61,7 @@ export function TenantPanel({ tenantId, tileData }: TenantPanelProps) {
         title={tenant.tenant.name}
         subtitle={tenant.tenant.industry}
         status={tenant.tenant.status}
+        imageUrl={tenant.tenant.logoUrl}
         onClose={closePanel}
         layoutId={`tenant-tile-${tenantId}`}
       />

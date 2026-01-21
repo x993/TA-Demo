@@ -8,6 +8,9 @@ import {
   ScanConfigPanel,
   AddSourceModal,
   PromptEditorModal,
+  ScanTabs,
+  ScanProgressTab,
+  ConfigureScanTab,
 } from "@/components/scans";
 import {
   mockDataSources,
@@ -16,11 +19,14 @@ import {
 } from "@/lib/mock-data";
 import type { DataSourceCategory, ScanConfig } from "@/types";
 
+type ScanTab = "progress" | "configure" | "history";
+
 export default function ScansPage() {
   // State
   const [dataSources, setDataSources] = useState<DataSourceCategory[]>(mockDataSources);
   const [config, setConfig] = useState<ScanConfig>(mockScanConfig);
   const [isScanning, setIsScanning] = useState(false);
+  const [activeTab, setActiveTab] = useState<ScanTab>("history");
 
   // Modal states
   const [addSourceModalOpen, setAddSourceModalOpen] = useState(false);
@@ -50,10 +56,11 @@ export default function ScansPage() {
 
   const handleRunScan = () => {
     setIsScanning(true);
+    setActiveTab("progress");
     // Simulate scan
     setTimeout(() => {
       setIsScanning(false);
-    }, 3000);
+    }, 15000);
   };
 
   const handleViewScanDetails = (scanId: string) => {
@@ -73,6 +80,18 @@ export default function ScansPage() {
   const handleManageKeys = () => {
     console.log("Manage API keys");
     // In a real app, this would open an API key management modal
+  };
+
+  const handleStartScan = (scanConfig: {
+    tenantSelection: 'all' | 'by_status' | 'custom';
+    selectedStatuses: string[];
+    selectedTenantIds: string[];
+    selectedPropertyIds: string[];
+    dataSources: string[];
+    dateRange: { from: Date; to: Date };
+  }) => {
+    console.log("Starting scan with config:", scanConfig);
+    handleRunScan();
   };
 
   return (
@@ -110,32 +129,52 @@ export default function ScansPage() {
         </div>
       </header>
 
-      {/* Main Content - Three Column Layout */}
+      {/* Tabs */}
+      <ScanTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+      {/* Tab Content */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Panel - Data Sources */}
-        <DataSourcesPanel
-          categories={dataSources}
-          onToggleSource={handleToggleSource}
-          onAddSource={handleAddSource}
-        />
-
-        {/* Center - Scan History */}
-        <main className="flex-1 flex flex-col overflow-hidden bg-background">
-          <ScanHistory
-            scans={mockScans}
-            onViewDetails={handleViewScanDetails}
-            onLoadMore={handleLoadMoreScans}
-            hasMore={true}
+        {activeTab === "progress" && (
+          <ScanProgressTab
+            isScanning={isScanning}
+            onCancelScan={() => setIsScanning(false)}
           />
-        </main>
+        )}
 
-        {/* Right Panel - Configuration */}
-        <ScanConfigPanel
-          config={config}
-          onConfigChange={handleConfigChange}
-          onEditPrompts={() => setPromptEditorOpen(true)}
-          onManageKeys={handleManageKeys}
-        />
+        {activeTab === "configure" && (
+          <ConfigureScanTab
+            onStartScan={handleStartScan}
+          />
+        )}
+
+        {activeTab === "history" && (
+          <>
+            {/* Left Panel - Data Sources */}
+            <DataSourcesPanel
+              categories={dataSources}
+              onToggleSource={handleToggleSource}
+              onAddSource={handleAddSource}
+            />
+
+            {/* Center - Scan History */}
+            <main className="flex-1 flex flex-col overflow-hidden bg-background">
+              <ScanHistory
+                scans={mockScans}
+                onViewDetails={handleViewScanDetails}
+                onLoadMore={handleLoadMoreScans}
+                hasMore={true}
+              />
+            </main>
+
+            {/* Right Panel - Configuration */}
+            <ScanConfigPanel
+              config={config}
+              onConfigChange={handleConfigChange}
+              onEditPrompts={() => setPromptEditorOpen(true)}
+              onManageKeys={handleManageKeys}
+            />
+          </>
+        )}
       </div>
 
       {/* Modals */}

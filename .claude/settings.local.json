@@ -56,7 +56,10 @@
       "Bash(cmd /c \"taskkill /PID 1443860 /F\")",
       "Bash(poetry run uvicorn:*)",
       "Bash(npm run lint:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(git pull:*)",
+      "Bash(git merge:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

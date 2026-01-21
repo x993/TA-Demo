@@ -30,10 +30,18 @@ export function TenantTile({ tenant, onClick, showLatestEvent = true }: TenantTi
     >
       <div className="flex items-start gap-3">
         {/* Logo/Monogram */}
-        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-          <span className="text-sm font-semibold text-muted-foreground">
-            {monogram}
-          </span>
+        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+          {tenant.logoUrl ? (
+            <img
+              src={tenant.logoUrl}
+              alt={tenant.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-sm font-semibold text-muted-foreground">
+              {monogram}
+            </span>
+          )}
         </div>
 
         {/* Content */}

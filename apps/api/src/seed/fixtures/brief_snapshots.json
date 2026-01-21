@@ -6,8 +6,8 @@
     "headline": "6 tenants disclosed material events this week. 2 moved to critical status, 4 improved or show positive momentum.",
     "headline_validated": true,
     "critical_count": 3,
-    "watch_count": 6,
-    "stable_count": 17,
+    "watch_count": 2,
+    "stable_count": 21,
     "improving_count": 4,
     "portfolio_verdict": {
       "direction": "increased",

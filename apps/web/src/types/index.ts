@@ -26,6 +26,7 @@ export interface Tenant {
   status: TenantStatus;
   propertyCount: number;
   latestEvent?: EventSummary;
+  logoUrl?: string;
 }
 
 export interface Property {

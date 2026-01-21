@@ -24,6 +24,7 @@ interface TenantFromAPI {
   entityType: string;
   status: TenantStatus;
   propertyCount: number;
+  logoUrl: string | null;
   latestEvent: {
     id: string;
     eventType: string;
@@ -208,6 +209,14 @@ function TenantRow({
   details,
   onToggle,
 }: TenantRowProps) {
+  // Generate monogram for fallback
+  const monogram = tenant.name
+    .split(' ')
+    .slice(0, 2)
+    .map(word => word[0])
+    .join('')
+    .toUpperCase();
+
   return (
     <div>
       <button
@@ -219,6 +228,20 @@ function TenantRow({
         ) : (
           <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
         )}
+        {/* Logo/Monogram */}
+        <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center overflow-hidden shrink-0">
+          {tenant.logoUrl ? (
+            <img
+              src={tenant.logoUrl}
+              alt={tenant.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-xs font-semibold text-muted-foreground">
+              {monogram}
+            </span>
+          )}
+        </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">

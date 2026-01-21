@@ -29,6 +29,7 @@ class Tenant(Base):
     industry: Mapped[str | None] = mapped_column(String(100))
     entity_type: Mapped[str] = mapped_column(String(20), default="private")  # public, private
     website: Mapped[str | None] = mapped_column(String(500))
+    logo_url: Mapped[str | None] = mapped_column(String(500))
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=datetime.utcnow
