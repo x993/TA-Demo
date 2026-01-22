@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   FileText,
-  Building,
   ChevronDown,
   User,
   Layers,
@@ -28,22 +27,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
-  { href: "/", label: "Dashboard" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/scans", label: "Scans" },
 ];
 
 // Bottom nav with icons for mobile
 const bottomNavItems = [
-  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/portfolio", icon: Briefcase, label: "Portfolio" },
   { href: "/scans", icon: Radar, label: "Scans" },
 ];
 
-function Header() {
+function AppHeader() {
   const { role, setRole } = useUIStore();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -54,7 +53,7 @@ function Header() {
     <header className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur-sm">
       <div className="container flex h-14 items-center px-4">
         {/* Logo - fixed width */}
-        <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
+        <Link href="/dashboard" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
             <Layers className="h-4.5 w-4.5 text-primary-foreground" />
           </div>
@@ -67,7 +66,7 @@ function Header() {
         {/* Desktop Navigation - centered */}
         <nav className="hidden md:flex items-center justify-center gap-1 flex-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
@@ -195,7 +194,7 @@ function Header() {
         <div className="md:hidden border-t border-border/50 bg-background">
           <nav className="container px-4 py-3 space-y-1">
             {navItems.map((item) => {
-              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
               return (
                 <Link
                   key={item.href}
@@ -257,9 +256,7 @@ function BottomNav() {
       <div className="flex items-center justify-around h-16 pb-safe">
         {bottomNavItems.map((item) => {
           const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/" && pathname.startsWith(item.href));
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
 
           return (
             <Link
@@ -334,7 +331,7 @@ function Footer() {
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Product</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
+              <li><Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
               <li><Link href="/portfolio" className="text-muted-foreground hover:text-foreground transition-colors">Portfolio</Link></li>
               <li><Link href="/scans" className="text-muted-foreground hover:text-foreground transition-colors">Scans</Link></li>
               <li><Link href="/api-access" className="text-muted-foreground hover:text-foreground transition-colors">API Access</Link></li>
@@ -378,10 +375,14 @@ function Footer() {
   );
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export default function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <AppHeader />
       <main className="flex-1 pb-24 md:pb-0">{children}</main>
       <div className="hidden md:block">
         <EmailCapture />

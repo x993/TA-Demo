@@ -118,6 +118,7 @@ async def seed_tenants(session: AsyncSession):
             industry=item.get("industry"),
             entity_type=item.get("entity_type", "private"),
             website=item.get("website"),
+            logo_url=item.get("logo_url"),
         )
         session.add(tenant)
     await session.commit()

@@ -1,59 +1,32 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
-  FileText,
-  Building,
   ChevronDown,
-  User,
   Layers,
-  Settings,
-  HelpCircle,
-  BookOpen,
   Menu,
   X,
+  BookOpen,
+  HelpCircle,
+  FileText,
   ExternalLink,
-  LayoutDashboard,
-  Briefcase,
-  Radar,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useUIStore } from "@/stores/ui-store";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
-const navItems = [
-  { href: "/", label: "Dashboard" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/scans", label: "Scans" },
-];
-
-// Bottom nav with icons for mobile
-const bottomNavItems = [
-  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/portfolio", icon: Briefcase, label: "Portfolio" },
-  { href: "/scans", icon: Radar, label: "Scans" },
-];
-
-function Header() {
-  const { role, setRole } = useUIStore();
-  const pathname = usePathname();
+function MarketingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const roleLabel = role === "exec" ? "Head of Assets" : "Asset Manager";
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur-sm">
       <div className="container flex h-14 items-center px-4">
-        {/* Logo - fixed width */}
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
             <Layers className="h-4.5 w-4.5 text-primary-foreground" />
@@ -66,24 +39,6 @@ function Header() {
 
         {/* Desktop Navigation - centered */}
         <nav className="hidden md:flex items-center justify-center gap-1 flex-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
-                  isActive
-                    ? "text-foreground bg-muted"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-
           {/* Pricing link */}
           <Link
             href="/pricing"
@@ -129,56 +84,14 @@ function Header() {
         </nav>
 
         {/* Right side actions */}
-        <div className="hidden md:flex items-center gap-3 shrink-0">
-          {/* Contact Sales badge */}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Client Login button */}
           <Link
-            href="/contact"
-            className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+            href="/dashboard"
+            className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           >
-            Contact Sales
+            Client Login
           </Link>
-
-          {/* Role Switcher */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm hover:bg-muted transition-colors outline-none border border-border/50">
-              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-                <User className="h-3.5 w-3.5 text-primary" />
-              </div>
-              <span className="hidden sm:inline text-foreground font-medium max-w-[100px] truncate">{roleLabel}</span>
-              <ChevronDown className="h-3 w-3 text-muted-foreground" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuLabel className="text-xs text-muted-foreground font-normal">
-                Switch demo persona
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => setRole("exec")}
-                className={cn("cursor-pointer", role === "exec" && "bg-muted")}
-              >
-                <div>
-                  <div className="font-medium">Head of Assets</div>
-                  <div className="text-xs text-muted-foreground">Executive overview</div>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setRole("am")}
-                className={cn("cursor-pointer", role === "am" && "bg-muted")}
-              >
-                <div>
-                  <div className="font-medium">Asset Manager</div>
-                  <div className="text-xs text-muted-foreground">Property-level detail</div>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/settings" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
 
           {/* Mobile menu button */}
           <button
@@ -194,24 +107,6 @@ function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border/50 bg-background">
           <nav className="container px-4 py-3 space-y-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "block px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                    isActive
-                      ? "text-foreground bg-muted"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
             <Link
               href="/pricing"
               onClick={() => setMobileMenuOpen(false)}
@@ -242,48 +137,19 @@ function Header() {
                 Contact Sales
               </Link>
             </div>
+            <div className="pt-2 border-t border-border/50 mt-2">
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-center"
+              >
+                Client Login
+              </Link>
+            </div>
           </nav>
         </div>
       )}
     </header>
-  );
-}
-
-function BottomNav() {
-  const pathname = usePathname();
-
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/50 bg-background/95 backdrop-blur-sm md:hidden safe-area-inset-bottom">
-      <div className="flex items-center justify-around h-16 pb-safe">
-        {bottomNavItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/" && pathname.startsWith(item.href));
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center justify-center gap-1 min-w-[64px] py-2 rounded-lg transition-all",
-                isActive
-                  ? "text-primary"
-                  : "text-muted-foreground active:text-foreground"
-              )}
-            >
-              <div className={cn(
-                "relative",
-                isActive && "after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-primary"
-              )}>
-                <Icon className="h-5 w-5" />
-              </div>
-              <span className={cn("text-xs", isActive ? "font-medium" : "font-normal")}>{item.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
   );
 }
 
@@ -334,7 +200,7 @@ function Footer() {
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Product</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
+              <li><Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
               <li><Link href="/portfolio" className="text-muted-foreground hover:text-foreground transition-colors">Portfolio</Link></li>
               <li><Link href="/scans" className="text-muted-foreground hover:text-foreground transition-colors">Scans</Link></li>
               <li><Link href="/api-access" className="text-muted-foreground hover:text-foreground transition-colors">API Access</Link></li>
@@ -378,16 +244,17 @@ function Footer() {
   );
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export default function MarketingLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 pb-24 md:pb-0">{children}</main>
-      <div className="hidden md:block">
-        <EmailCapture />
-        <Footer />
-      </div>
-      <BottomNav />
+      <MarketingHeader />
+      <main className="flex-1">{children}</main>
+      <EmailCapture />
+      <Footer />
     </div>
   );
 }

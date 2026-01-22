@@ -108,8 +108,8 @@ export default function EventMemoPage() {
     return (
       <div className="max-w-4xl mx-auto py-16 text-center">
         <p className="text-muted-foreground">Event not found</p>
-        <Link href="/" className="text-primary hover:underline mt-2 inline-block">
-          ← Back to summary
+        <Link href="/dashboard" className="text-primary hover:underline mt-2 inline-block">
+          ← Back to dashboard
         </Link>
       </div>
     );

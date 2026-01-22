@@ -18,6 +18,7 @@ class TenantResponse(CamelModel):
     status: str
     property_count: int
     latest_event: EventSummary | None
+    logo_url: str | None = None
 
 
 class PropertySummary(CamelModel):
