@@ -65,19 +65,19 @@ export function ScanLiveMetrics({ isScanning = true }: ScanLiveMetricsProps) {
     setTimeout(() => setDowngradesCount(2), 24000);
 
     // Scan rate simulation - smoother with gradual changes
-    const targetRate = 35;
+    const targetRate = 5;
     const rateInterval = setInterval(() => {
-      // Gradually approach target with small random variations
+      // Gradually approach target with small random variations (3-7 range)
       const variation = (Math.random() - 0.5) * 4; // -2 to +2
       const newRate = Math.round(targetRate + variation);
-      scanRateRef.current = newRate;
-      setScanRate(newRate);
+      scanRateRef.current = Math.max(3, Math.min(7, newRate)); // Clamp to 3-7
+      setScanRate(scanRateRef.current);
     }, 2000); // Update every 2 seconds instead of 500ms
 
     // Initial ramp up
-    setTimeout(() => setScanRate(28), 500);
-    setTimeout(() => setScanRate(32), 1000);
-    setTimeout(() => setScanRate(35), 1500);
+    setTimeout(() => setScanRate(3), 500);
+    setTimeout(() => setScanRate(4), 1000);
+    setTimeout(() => setScanRate(5), 1500);
 
     return () => {
       clearInterval(tenantsInterval);
@@ -184,7 +184,7 @@ export function ScanLiveMetrics({ isScanning = true }: ScanLiveMetricsProps) {
           <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-primary rounded-full transition-all duration-1000 ease-out"
-              style={{ width: `${Math.min((scanRate / 50) * 100, 100)}%` }}
+              style={{ width: `${Math.min((scanRate / 10) * 100, 100)}%` }}
             />
           </div>
         </div>

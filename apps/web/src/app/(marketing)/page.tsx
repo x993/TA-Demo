@@ -1,9 +1,10 @@
 import {
   MarketingHero,
-  StatsSection,
-  DataSourcesSection,
-  FeaturesSection,
-  IntegrationsSection,
+  ProblemSection,
+  ApproachSection,
+  // CapabilitiesSection,
+  PersonasSection,
+  TrustSection,
   CTASection,
 } from "@/components/marketing";
 
@@ -11,10 +12,11 @@ export default function MarketingLandingPage() {
   return (
     <>
       <MarketingHero />
-      <StatsSection />
-      <DataSourcesSection />
-      <FeaturesSection />
-      <IntegrationsSection />
+      <ProblemSection />
+      <ApproachSection />
+      {/* <CapabilitiesSection /> */}
+      <PersonasSection />
+      <TrustSection />
       <CTASection />
     </>
   );

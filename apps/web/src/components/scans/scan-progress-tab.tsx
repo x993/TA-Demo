@@ -12,11 +12,7 @@ import {
   Circle,
   Loader2,
   FileText,
-  Newspaper,
-  Scale,
-  Building2,
-  Database,
-  Settings,
+  Play,
 } from "lucide-react";
 
 interface ScanStep {
@@ -46,6 +42,8 @@ interface ScanProgressTabProps {
   isScanning: boolean;
   onCancelScan: () => void;
   onViewResults?: () => void;
+  onScanStart?: () => void;
+  onScanComplete?: () => void;
 }
 
 const initialSteps: ScanStep[] = [
@@ -71,16 +69,19 @@ const mockUpdates: LiveUpdate[] = [
   { id: "12", timestamp: "12:34:21", type: "info", message: "Generating alerts for flagged tenants", tenant: "System" },
 ];
 
-export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: ScanProgressTabProps) {
+export function ScanProgressTab({ isScanning, onCancelScan, onViewResults, onScanStart, onScanComplete }: ScanProgressTabProps) {
   const [steps, setSteps] = useState<ScanStep[]>(initialSteps);
   const [progress, setProgress] = useState(0);
   const [updates, setUpdates] = useState<LiveUpdate[]>([]);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [scanComplete, setScanComplete] = useState(false);
   const [scanResults, setScanResults] = useState<ScanResults | null>(null);
-  const [autoStarted, setAutoStarted] = useState(false);
+  const [scanRunning, setScanRunning] = useState(false);
   const feedRef = useRef<HTMLDivElement>(null);
-  const wasScanning = useRef(false);
+  const intervalsRef = useRef<{ progress: NodeJS.Timeout | null; time: NodeJS.Timeout | null }>({
+    progress: null,
+    time: null,
+  });
 
   // Auto-scroll live feed
   useEffect(() => {
@@ -89,7 +90,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
     }
   }, [updates]);
 
-  // Handle scan completion
+  // Reset to ready state
   const handleNewScan = () => {
     setScanComplete(false);
     setScanResults(null);
@@ -97,7 +98,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
     setProgress(0);
     setUpdates([]);
     setElapsedTime(0);
-    setAutoStarted(false);
+    setScanRunning(false);
   };
 
   const formatTime = (seconds: number) => {
@@ -106,31 +107,15 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Detect scan completion
+  // Cleanup intervals on unmount
   useEffect(() => {
-    if (wasScanning.current && !isScanning) {
-      setScanComplete(true);
-      setScanResults({
-        tenantsScanned: 62,
-        findingsCount: 5,
-        alertsGenerated: 2,
-        scoreChanges: { upgrades: 1, downgrades: 2 },
-        duration: formatTime(elapsedTime),
-      });
-    }
-    wasScanning.current = isScanning;
-  }, [isScanning, elapsedTime]);
-
-  // Auto-start simulation when component mounts (demo purposes)
-  useEffect(() => {
-    if (!autoStarted && !isScanning && !scanComplete) {
-      setAutoStarted(true);
-      // Start the simulation automatically
-      simulateScan();
-    }
+    return () => {
+      if (intervalsRef.current.progress) clearInterval(intervalsRef.current.progress);
+      if (intervalsRef.current.time) clearInterval(intervalsRef.current.time);
+    };
   }, []);
 
-  const simulateScan = () => {
+  const startScan = () => {
     // Reset state
     setSteps(initialSteps);
     setProgress(0);
@@ -138,12 +123,14 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
     setElapsedTime(0);
     setScanComplete(false);
     setScanResults(null);
+    setScanRunning(true);
+    onScanStart?.();
 
     // Progress simulation - 33 seconds total
-    const progressInterval = setInterval(() => {
+    intervalsRef.current.progress = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(progressInterval);
+          if (intervalsRef.current.progress) clearInterval(intervalsRef.current.progress);
           return 100;
         }
         return prev + 1;
@@ -151,7 +138,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
     }, 330);
 
     // Elapsed time
-    const timeInterval = setInterval(() => {
+    intervalsRef.current.time = setInterval(() => {
       setElapsedTime((prev) => prev + 1);
     }, 1000);
 
@@ -172,12 +159,15 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
     // Complete all steps and show results
     setTimeout(() => {
       setSteps((prev) => prev.map((step) => ({ ...step, status: "complete" })));
-      clearInterval(progressInterval);
-      clearInterval(timeInterval);
+      if (intervalsRef.current.progress) clearInterval(intervalsRef.current.progress);
+      if (intervalsRef.current.time) clearInterval(intervalsRef.current.time);
+      setProgress(100);
 
       // Set completion state
       setTimeout(() => {
         setScanComplete(true);
+        setScanRunning(false);
+        onScanComplete?.();
         setScanResults({
           tenantsScanned: 62,
           findingsCount: 5,
@@ -186,7 +176,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
           duration: "0:33",
         });
       }, 500);
-    }, 32000);
+    }, 33000);
 
     // Live updates simulation - spread across 33 seconds
     mockUpdates.forEach((update, index) => {
@@ -194,19 +184,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
         setUpdates((prev) => [...prev, update]);
       }, (index + 1) * 2500);
     });
-
-    return () => {
-      clearInterval(progressInterval);
-      clearInterval(timeInterval);
-    };
   };
-
-  // Also run simulation when isScanning becomes true
-  useEffect(() => {
-    if (isScanning && !scanComplete) {
-      simulateScan();
-    }
-  }, [isScanning]);
 
   const getStepIcon = (status: ScanStep["status"]) => {
     switch (status) {
@@ -230,7 +208,12 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
       case "alert":
         return <AlertTriangle className="h-4 w-4 text-negative" />;
       default:
-        return <Circle className="h-4 w-4 text-muted-foreground" />;
+        return (
+          <span className="relative flex h-4 w-4 items-center justify-center">
+            <span className="absolute inline-flex h-2.5 w-2.5 rounded-full bg-primary/40 animate-pulse" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+          </span>
+        );
     }
   };
 
@@ -238,7 +221,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
   if (scanComplete && scanResults) {
     return (
       <div className="flex-1 overflow-auto p-6">
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-3xl mx-auto space-y-6 pb-12">
           {/* Success Header */}
           <div className="rounded-xl border border-positive/30 bg-positive/5 p-6">
             <div className="flex items-center gap-4">
@@ -298,12 +281,33 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
             </div>
           </div>
 
+          {/* Scan Progress (completed) */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <h3 className="text-sm font-semibold text-foreground mb-4">Scan Progress</h3>
+            <div className="space-y-4">
+              {initialSteps.map((step) => (
+                <div key={step.id} className="flex items-start gap-4">
+                  <div className="mt-0.5">
+                    <CheckCircle className="h-5 w-5 text-positive" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-positive">
+                      {step.label}
+                    </div>
+                    <div className="text-xs text-muted-foreground">{step.description}</div>
+                  </div>
+                  <span className="text-xs text-positive">Done</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Scan Activity Log */}
           <div className="rounded-xl border border-border bg-card">
             <div className="px-4 py-3 border-b border-border">
               <h3 className="text-sm font-semibold text-foreground">Scan Activity</h3>
             </div>
-            <div className="p-4 h-64 overflow-auto space-y-2">
+            <div className="p-4 h-[500px] overflow-auto space-y-2">
               {updates.map((update) => (
                 <div key={update.id} className="flex items-start gap-3 text-sm">
                   {getUpdateIcon(update.type)}
@@ -323,6 +327,78 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
               </div>
             </div>
           </div>
+
+          {/* Bottom spacer */}
+          <div className="h-8" aria-hidden="true" />
+        </div>
+      </div>
+    );
+  }
+
+  // Ready state (not scanning yet)
+  if (!scanRunning) {
+    return (
+      <div className="flex-1 overflow-auto p-6">
+        <div className="max-w-3xl mx-auto space-y-6 pb-12">
+          {/* Ready Header */}
+          <div className="rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center">
+                  <Play className="h-7 w-7 text-muted-foreground" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-foreground">Ready to Scan</h2>
+                  <p className="text-sm text-muted-foreground">
+                    62 tenants · 6 data sources configured
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={startScan}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                <Play className="h-4 w-4" />
+                Scan
+              </button>
+            </div>
+          </div>
+
+          {/* Steps (pending state) */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <h3 className="text-sm font-semibold text-foreground mb-4">Scan Progress</h3>
+            <div className="space-y-4">
+              {steps.map((step) => (
+                <div key={step.id} className="flex items-start gap-4">
+                  <div className="mt-0.5">
+                    <Circle className="h-5 w-5 text-muted-foreground/30" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-muted-foreground">
+                      {step.label}
+                    </div>
+                    <div className="text-xs text-muted-foreground/70">{step.description}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Activity Feed (empty state) */}
+          <div className="rounded-xl border border-border bg-card">
+            <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-foreground">Scan Activity</h3>
+              <span className="text-xs text-muted-foreground">Waiting to start</span>
+            </div>
+            <div className="p-4 h-[500px] flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">
+                Activity will appear here once the scan starts
+              </p>
+            </div>
+          </div>
+
+          {/* Bottom spacer */}
+          <div className="h-8" aria-hidden="true" />
         </div>
       </div>
     );
@@ -331,14 +407,14 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
   // Active scan progress view
   return (
     <div className="flex-1 overflow-auto p-6">
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-6 pb-12">
         {/* Progress Header */}
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-xl font-semibold text-foreground">Scan in Progress</h2>
               <p className="text-sm text-muted-foreground">
-                Scanning {62} tenants across {6} data sources
+                Scanning 62 tenants across 6 data sources
               </p>
             </div>
             <div className="text-right">
@@ -360,7 +436,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
         <div className="rounded-xl border border-border bg-card p-4">
           <h3 className="text-sm font-semibold text-foreground mb-4">Scan Progress</h3>
           <div className="space-y-4">
-            {steps.map((step, index) => (
+            {steps.map((step) => (
               <div key={step.id} className="flex items-start gap-4">
                 <div className="mt-0.5">{getStepIcon(step.status)}</div>
                 <div className="flex-1">
@@ -394,7 +470,7 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
           </div>
           <div
             ref={feedRef}
-            className="p-4 h-64 overflow-auto space-y-2"
+            className="p-4 h-[500px] overflow-auto space-y-2"
           >
             {updates.length === 0 ? (
               <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
@@ -416,6 +492,9 @@ export function ScanProgressTab({ isScanning, onCancelScan, onViewResults }: Sca
             )}
           </div>
         </div>
+
+        {/* Bottom spacer */}
+        <div className="h-8" aria-hidden="true" />
       </div>
     </div>
   );

@@ -26,8 +26,8 @@ import type { DataSourceCategory, ScanConfig } from "@/types";
 type ScanTab = "progress" | "configure" | "history";
 
 const tabs = [
-  { id: "progress" as const, label: "Progress", icon: Activity },
   { id: "configure" as const, label: "Configure", icon: Settings2 },
+  { id: "progress" as const, label: "Progress", icon: Activity },
   { id: "history" as const, label: "History", icon: History },
 ];
 
@@ -36,7 +36,7 @@ export default function ScansPage() {
   const [dataSources, setDataSources] = useState<DataSourceCategory[]>(mockDataSources);
   const [config, setConfig] = useState<ScanConfig>(mockScanConfig);
   const [isScanning, setIsScanning] = useState(false);
-  const [activeTab, setActiveTab] = useState<ScanTab>("progress");
+  const [activeTab, setActiveTab] = useState<ScanTab>("configure");
 
   // Modal states
   const [addSourceModalOpen, setAddSourceModalOpen] = useState(false);
@@ -130,7 +130,7 @@ export default function ScansPage() {
   );
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem)]">
+    <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
       {/* Page Header */}
       <header className="border-b border-border/50 bg-background px-6 py-4">
         <div className="flex items-center justify-between">
@@ -170,7 +170,7 @@ export default function ScansPage() {
         {activeTab === "progress" && (
           <>
             {/* Left Sidebar - Data Sources Status */}
-            <ScanSourcesStatus isScanning={true} />
+            <ScanSourcesStatus isScanning={isScanning} />
 
             {/* Center Content with Tabs */}
             <main className="flex-1 flex flex-col overflow-hidden bg-background">
@@ -180,12 +180,14 @@ export default function ScansPage() {
                   isScanning={isScanning}
                   onCancelScan={() => setIsScanning(false)}
                   onViewResults={() => setActiveTab("history")}
+                  onScanStart={() => setIsScanning(true)}
+                  onScanComplete={() => setIsScanning(false)}
                 />
               </div>
             </main>
 
             {/* Right Sidebar - Live Metrics */}
-            <ScanLiveMetrics isScanning={true} />
+            <ScanLiveMetrics isScanning={isScanning} />
           </>
         )}
 
